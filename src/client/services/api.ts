@@ -1,37 +1,30 @@
-import { useSessionStore } from 'src/stores/session'
-
-export const BASE_URL = 'https://localhost:8000/api'
+import axios from 'axios'
+import { useSessionStore } from '@/stores/session'
 
 interface ApiRequest {
-	method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
-	headers?: object
+	method: 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT'
 	body: object
 }
 
-export async function api(url: string, params: ApiRequest, token = true) {
+export const BASE_URL = 'http://localhost:8000/api'
+
+export async function api<T = any>(
+	url: string,
+	data: ApiRequest,
+	token = true
+): Promise<Awaited<T>> {
 	const session = useSessionStore()
 
-	params = Object.assign(
-		{
-			mode: 'cors',
-			cache: 'no-cache',
-		},
-		params
-	)
-
-	params.headers = Object.assign(
-		{
-			Authorization: `Bearer ${token ? session.token : ''}`,
-			'Content-Type': 'application/json',
-		},
-		params.headers
-	)
-
-	const response = await fetch(BASE_URL + url, <RequestInit>params)
-	const json = (await response.json()) || {}
-	if (!response.ok) {
-		const errorMessage = json.error || response.status
-		throw new Error(errorMessage)
-	}
-	return json
+	return (
+		await axios(url, {
+			method: data.method,
+			baseURL: BASE_URL,
+			headers: {
+				'Content-Type': 'application/json',
+				'Access-Control-Allow-Origin': '*',
+				Authorization: token ? `Bearer ${session.token}` : '',
+			},
+			data: data.body,
+		})
+	).data
 }
