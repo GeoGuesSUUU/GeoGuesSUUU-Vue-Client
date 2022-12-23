@@ -7,10 +7,11 @@ const sessionStore = useSessionStore()
 
 const router = useRouter()
 
-const { login, defaultEmail, defaultPassword } = sessionStore
+const { register } = sessionStore
 
-const userEmail = ref(defaultEmail)
-const password = ref(defaultPassword)
+const username = ref('')
+const useremail = ref('')
+const password = ref('')
 
 const error = ref<string | null>(null)
 
@@ -20,7 +21,7 @@ async function checkForm() {
 	error.value = null
 	try {
 		isLoading.value = true
-		await login(userEmail.value, password.value)
+		await register(username.value, useremail.value, password.value)
 		isLoading.value = false
 		router.push({ name: 'home' })
 	} catch (e) {
@@ -35,9 +36,19 @@ async function checkForm() {
 			<input
 				type="email"
 				class="form-control"
+				id="floatingName"
+				placeholder="..."
+				v-model="username"
+				@keyup.enter="checkForm" />
+			<label for="floatingName">Username</label>
+		</div>
+		<div class="form-floating mb-3">
+			<input
+				type="email"
+				class="form-control"
 				id="floatingInput"
 				placeholder="name@example.com"
-				v-model="userEmail"
+				v-model="useremail"
 				@keyup.enter="checkForm" />
 			<label for="floatingInput">Email address</label>
 		</div>
@@ -56,7 +67,7 @@ async function checkForm() {
 			type="button"
 			class="btn btn-primary"
 			@click="checkForm">
-			Connexion
+			Inscription
 		</button>
 		<button v-else class="btn btn-primary" type="button" disabled>
 			<span
@@ -68,4 +79,4 @@ async function checkForm() {
 	</form>
 </template>
 
-<style scoped src="./LoginForm.scss"></style>
+<style scoped src="./RegisterForm.scss"></style>
