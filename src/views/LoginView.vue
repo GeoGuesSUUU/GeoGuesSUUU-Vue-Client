@@ -12,7 +12,7 @@ function toggleIsRegisterPage() {
 
 <template>
 	<main>
-		<img id="app-logo" src="src/assets/earth-icon.svg" alt="logo" />
+		<img id="app-logo" src="/src/assets/earth-icon.svg" alt="logo" />
 		<div class="form-check form-switch">
 			<input
 				class="form-check-input"
