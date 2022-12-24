@@ -1,0 +1,28 @@
+$color: rgb(0, 212, 96);
+
+.container {
+
+    .page-links > li a, .app-logo-div, .tool-page-links {
+        padding-block: 10px;
+    }
+
+    .page-links li a {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        border-bottom: 5px solid #0000;
+
+
+        transition: background-color 200ms;
+
+        &.active {
+            border-color: $color;
+        }
+
+        &:hover {
+            cursor: pointer;
+            background-color: $color;
+        }
+    }
+
+}
