@@ -25,6 +25,7 @@ async function checkForm() {
 		router.push({ name: 'home' })
 	} catch (e) {
 		error.value = 'Invalid login'
+		isLoading.value = false
 	}
 }
 </script>
@@ -50,6 +51,9 @@ async function checkForm() {
 				v-model="password"
 				@keyup.enter="checkForm" />
 			<label for="floatingPassword">Password</label>
+		</div>
+		<div :class="{ visible: error }" class="ui error message">
+			{{ error }}
 		</div>
 		<button
 			v-if="!isLoading"

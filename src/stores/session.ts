@@ -2,7 +2,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { api } from '@/client/services/api'
 import type { ApiLoginReponse } from '@/client/types/api-response'
-import type { User } from '@/client/types/bussiness'
+import type { UserDetails } from '../client/types/bussiness'
 
 const defaultEmail = localStorage.getItem('email') || ''
 const defaultPassword = localStorage.getItem('password') || ''
@@ -11,7 +11,7 @@ const token = localStorage.getItem('token') || ''
 export const useSessionStore = defineStore('session', () => {
 	// State
 
-	const user = ref<User | null>(null)
+	const user = ref<UserDetails | null>(null)
 
 	// Getter
 
@@ -73,7 +73,6 @@ export const useSessionStore = defineStore('session', () => {
 	async function logout() {
 		localStorage.setItem('password', '')
 		localStorage.setItem('token', '')
-		window.location.reload()
 	}
 
 	return {
