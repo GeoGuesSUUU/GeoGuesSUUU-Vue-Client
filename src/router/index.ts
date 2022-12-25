@@ -57,6 +57,11 @@ const router = createRouter({
 					name: 'store',
 					component: () => import('../components/StorePage/StorePage.vue'),
 				},
+				{
+					path: '/user/:id',
+					name: 'user',
+					component: () => import('../components/UserPage/UserPage.vue'),
+				},
 			],
 		},
 		{ path: '/:pathMatch(.*)*', name: 'NotFound', component: NotFoundView },

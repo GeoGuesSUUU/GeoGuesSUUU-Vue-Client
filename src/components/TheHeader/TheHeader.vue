@@ -1,12 +1,13 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, toRefs } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useSessionStore } from '@/stores/session'
 
 const sessionStore = useSessionStore()
 const router = useRouter()
 
-const { logout, user } = sessionStore
+const { user } = toRefs(sessionStore)
+const { logout } = sessionStore
 
 const searchGame = ref('')
 
@@ -71,8 +72,8 @@ async function signout() {
 					</form>
 
 					<div class="dropdown text-end">
-						<router-link
-							to="#"
+						<a
+							href="#"
 							class="d-block link-dark text-decoration-none dropdown-toggle"
 							data-bs-toggle="dropdown"
 							aria-expanded="false">
@@ -82,7 +83,7 @@ async function signout() {
 								width="32"
 								height="32"
 								class="rounded-circle" />
-						</router-link>
+						</a>
 						<ul class="dropdown-menu text-small">
 							<li>
 								<div class="user-info">
@@ -111,16 +112,22 @@ async function signout() {
 								<hr class="hr" />
 							</li>
 							<li>
-								<router-link to="#" class="dropdown-item">
+								<router-link
+									:to="{ name: 'user', params: { id: user?.id } }"
+									class="dropdown-item">
 									<i class="bi bi-person-circle mx-1"></i>
 									Profile
 								</router-link>
 							</li>
 							<li>
-								<router-link to="#" class="dropdown-item">
+								<button
+									type="button"
+									class="dropdown-item"
+									data-bs-toggle="modal"
+									data-bs-target="#exampleModal">
 									<i class="bi bi-gear mx-1"></i>
 									Settings
-								</router-link>
+								</button>
 							</li>
 							<li><hr class="dropdown-divider" /></li>
 							<li>
@@ -135,6 +142,45 @@ async function signout() {
 			</div>
 		</div>
 	</header>
+
+	<!-- Modal -->
+	<div
+		class="modal fade"
+		id="exampleModal"
+		tabindex="-1"
+		aria-labelledby="exampleModalLabel"
+		aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="exampleModalLabel">Settings</h1>
+					<button
+						type="button"
+						class="btn-close"
+						data-bs-dismiss="modal"
+						aria-label="Close"></button>
+				</div>
+				<div class="modal-body">
+					...
+					<h2>Ideas :</h2>
+					<ul>
+						<li>Darkmode</li>
+						<li>Map color</li>
+						<li>User locale</li>
+					</ul>
+				</div>
+				<div class="modal-footer">
+					<button
+						type="button"
+						class="btn btn-secondary"
+						data-bs-dismiss="modal">
+						Close
+					</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
+				</div>
+			</div>
+		</div>
+	</div>
 </template>
 
 <style scoped src="./TheHeader.scss"></style>
