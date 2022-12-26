@@ -59,7 +59,7 @@ function getLevelLabelByXP(user: UserApp) {
 								</p>
 							</div>
 							<span class="level-badge badge text-bg-primary">
-								Lvl. {{ currentUser.level }}
+								Lvl. {{ user?.level }}
 							</span>
 						</div>
 						<div
@@ -83,7 +83,12 @@ function getLevelLabelByXP(user: UserApp) {
 							v-for="item of user?.userItems"
 							:key="item.itemType.id"
 							class="col d-flex justify-content-center">
-							<div class="card h-100">
+							<div
+								class="card h-100"
+								:style="`--inventory-card-color: var(--rarety-${item.itemType.rarity.toLocaleLowerCase()})`">
+								<div class="card-header">
+									{{ item.itemType.rarity.toLocaleUpperCase() }}
+								</div>
 								<img
 									src="/src/assets/item-default-img.jpg"
 									class="card-img-top"
@@ -91,9 +96,7 @@ function getLevelLabelByXP(user: UserApp) {
 								<div class="card-body">
 									<h5 class="card-title">
 										{{ item.itemType.name }}
-										<span
-											v-if="!item.itemType.fantastic"
-											class="badge bg-secondary">
+										<span v-if="!item.itemType.fantastic" class="badge">
 											x{{ item.quantity }}
 										</span>
 									</h5>

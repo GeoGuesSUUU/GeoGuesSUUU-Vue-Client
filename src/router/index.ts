@@ -37,6 +37,15 @@ const router = createRouter({
 			},
 		},
 		{
+			path: '/user/:id(\\d+)',
+			redirect: (_to) => {
+				return {
+					name: 'loading',
+					query: { name: 'user', params: JSON.stringify(_to.params) },
+				}
+			},
+		},
+		{
 			path: '/home',
 			name: 'app',
 			component: HomeView,
@@ -58,7 +67,7 @@ const router = createRouter({
 					component: () => import('../components/StorePage/StorePage.vue'),
 				},
 				{
-					path: '/user/:id',
+					path: '/user/:id(\\d+)',
 					name: 'user',
 					component: () => import('../components/UserPage/UserPage.vue'),
 				},
