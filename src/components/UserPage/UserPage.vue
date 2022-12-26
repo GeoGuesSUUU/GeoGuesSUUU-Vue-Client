@@ -11,11 +11,13 @@ const router = useRouter()
 const { currentUser } = toRefs(geoStore)
 
 const user = ref<UserApp | null>(null)
+console.log('Init', user.value)
 
 onMounted(async () => {
 	const userId = +router.currentRoute.value.params.id
 	if (userId !== currentUser.value.id) {
 		user.value = await UserService.getUserById(userId)
+		console.log(user.value)
 	} else {
 		user.value = currentUser.value
 	}
@@ -33,7 +35,7 @@ function getLevelLabelByXP(user: UserApp) {
 	<main>
 		<div class="card main-card">
 			<div class="card-body">
-				<div class="user-info">
+				<div v-if="user" class="user-info">
 					<img
 						src="/src/assets/default_user.svg"
 						alt="user icon"
@@ -75,9 +77,9 @@ function getLevelLabelByXP(user: UserApp) {
 						</button>
 					</div>
 				</div>
-				<h1 class="mt-3">Inventory</h1>
-				<hr class="hr" />
-				<div class="inventory">
+				<div v-if="currentUser.id === user?.id" class="inventory">
+					<h1 class="mt-3">Inventory</h1>
+					<hr class="hr" />
 					<div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4">
 						<div
 							v-for="item of user?.userItems"

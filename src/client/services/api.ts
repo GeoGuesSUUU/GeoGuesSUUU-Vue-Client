@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { useSessionStore } from '@/stores/session'
+import type { ApiReponse } from '../types/api-response'
 
 interface ApiRequest {
 	method: 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT'
@@ -12,7 +13,7 @@ export async function api<T = any>(
 	url: string,
 	data: ApiRequest,
 	token = true
-): Promise<Awaited<T>> {
+): Promise<Awaited<ApiReponse<T>>> {
 	const session = useSessionStore()
 
 	return (

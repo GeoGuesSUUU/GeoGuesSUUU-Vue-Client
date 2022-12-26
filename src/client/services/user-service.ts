@@ -10,12 +10,16 @@ const { currentUser } = toRefs(geoStore)
 export class UserService {
 	static async getUserById(id: number): Promise<UserApp> {
 		if (currentUser.value.id === id) {
-			return api<UserApp>(`/user/${id}/private`, {
+			return (
+				await api<UserApp>(`/user/${id}/private`, {
+					method: 'GET',
+				})
+			).items
+		}
+		return (
+			await api<UserApp>(`/user/${id}`, {
 				method: 'GET',
 			})
-		}
-		return api<UserApp>(`/user/${id}`, {
-			method: 'GET',
-		})
+		).items
 	}
 }
