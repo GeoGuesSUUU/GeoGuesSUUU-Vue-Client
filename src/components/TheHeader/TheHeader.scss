@@ -1,5 +1,15 @@
 $color: rgb(0, 212, 96);
 
+.header-components {
+    position: relative;
+
+    .app-logo-div {
+        position: absolute;
+        left: 50%;
+        top: -5px;
+    }
+}
+
 .container {
 
     .page-links>li a,
@@ -33,12 +43,27 @@ $color: rgb(0, 212, 96);
 
     .user-info {
 
-        .username {
-            text-align: center;
-            font-size: x-large;
-            overflow: hidden;
-            width: 150px;
+        .dropdown-header {
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+
+            .username {
+                text-align: center;
+                font-size: x-large;
+                overflow-x: hidden;
+                width: 150px;
+                margin-bottom: 0;
+            }
+
+            span {
+                font-size: small;
+            }
         }
+
+
 
         .money-div {
             display: flex;
@@ -67,6 +92,12 @@ $color: rgb(0, 212, 96);
 
             img {
                 margin-left: 2.5px;
+            }
+
+            .level-label {
+                margin-bottom: 0;
+                font-weight: lighter;
+                font-size: smaller;
             }
         }
     }
