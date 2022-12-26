@@ -3,7 +3,7 @@ import { useSessionStore } from '@/stores/session'
 
 interface ApiRequest {
 	method: 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT'
-	body: object
+	body?: object
 }
 
 export const BASE_URL = 'http://localhost:8000/api'
@@ -24,7 +24,7 @@ export async function api<T = any>(
 				'Access-Control-Allow-Origin': '*',
 				Authorization: token ? `Bearer ${session.token}` : '',
 			},
-			data: data.body,
+			data: data?.body,
 		})
 	).data
 }

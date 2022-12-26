@@ -40,7 +40,7 @@ export interface ItemSlot {
 
 export interface UserDetails extends User {
 	scores: []
-	userItems: ItemSlot[]
+	userItems?: ItemSlot[]
 	countries: Country[]
 }
 

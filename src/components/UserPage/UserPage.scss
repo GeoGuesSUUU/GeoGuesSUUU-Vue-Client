@@ -1,0 +1,88 @@
+.main-card {
+    margin-inline: 40px;
+    margin-top: 100px;
+
+    .user-info {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .user-pic {
+            position: relative;
+            top: -50px;
+            margin-inline: 40px;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .user-info-stat {
+            width: 100%;
+
+            h2 {
+                font-size: 50px;
+            }
+
+            .money-div {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+
+                span {
+                    margin-left: 5px;
+                    font-size: large;
+                    font-weight: lighter;
+                }
+
+                img {
+                    margin-inline: 5px;
+                }
+            }
+
+            .xp-div {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+
+                .progress {
+                    height: 10px;
+                    width: 110px;
+                }
+
+                img {
+                    margin-left: 2.5px;
+                }
+
+                .level-label {
+                    margin-bottom: 0;
+                    font-weight: lighter;
+                    font-size: smaller;
+                }
+
+                .level-badge {
+                    margin-left: 10px;
+                }
+            }
+        }
+    }
+
+    .inventory {
+        .card {
+            max-width: 300px;
+            overflow-x: hidden;
+
+            img {
+                width: 300px;
+                object-fit: cover;
+                object-position: center;
+            }
+        }
+    }
+}
+
+.bi-patch-check-fill {
+    color: rgb(0, 241, 52)
+}
