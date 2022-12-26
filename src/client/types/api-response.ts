@@ -10,9 +10,7 @@ export interface ApiReponse<T = any> {
 	items: T
 }
 
-export interface ApiLoginReponse extends Omit<ApiReponse, 'items'> {
-	items: {
-		user: UserDetails
-		token: string
-	}
+export interface ApiLoginReponse {
+	user: UserDetails
+	token: string
 }
