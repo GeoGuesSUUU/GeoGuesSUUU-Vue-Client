@@ -1,14 +1,15 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, toRefs } from 'vue'
 import { useRouter } from 'vue-router'
 import { useSessionStore } from '@/stores/session'
-import { NotifyService, NotifyType } from '../../client/services/notify-service';
+import { NotifyService, NotifyType } from '../../client/services/notify-service'
 
 const sessionStore = useSessionStore()
 
 const router = useRouter()
 
-const { login, defaultEmail, defaultPassword, user } = sessionStore
+const { user } = toRefs(sessionStore)
+const { login, defaultEmail, defaultPassword } = sessionStore
 
 const userEmail = ref(defaultEmail)
 const password = ref(defaultPassword)
@@ -33,7 +34,7 @@ async function checkForm() {
 		isLoading.value = true
 		await login(userEmail.value, password.value)
 		isLoading.value = false
-		NotifyService.notify('Connected as ' + user?.name, NotifyType.SUCCESS)
+		NotifyService.notify('Connected as ' + user.value?.name, NotifyType.SUCCESS)
 		router.push({ name: 'home' })
 	} catch (e) {
 		error.value = 'Invalid login'
