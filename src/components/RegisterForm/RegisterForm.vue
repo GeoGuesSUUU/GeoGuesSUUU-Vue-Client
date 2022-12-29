@@ -19,6 +19,20 @@ const isLoading = ref<boolean>(false)
 
 async function checkForm() {
 	error.value = null
+
+	if (!username.value) {
+		error.value = 'Please enter an username'
+		return
+	}
+	if (!useremail.value) {
+		error.value = 'Please enter an email address'
+		return
+	}
+	if (!password.value) {
+		error.value = 'Please enter a password'
+		return
+	}
+
 	try {
 		isLoading.value = true
 		await register(username.value, useremail.value, password.value)
@@ -26,6 +40,7 @@ async function checkForm() {
 		router.push({ name: 'home' })
 	} catch (e) {
 		error.value = 'Invalid login'
+		isLoading.value = false
 	}
 }
 </script>
@@ -61,6 +76,9 @@ async function checkForm() {
 				v-model="password"
 				@keyup.enter="checkForm" />
 			<label for="floatingPassword">Password</label>
+		</div>
+		<div :class="{ visible: error }" class="ui error message">
+			{{ error }}
 		</div>
 		<button
 			v-if="!isLoading"
