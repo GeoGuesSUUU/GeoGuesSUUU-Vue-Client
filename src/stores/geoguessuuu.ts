@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { ref, computed, toRefs } from 'vue'
-import type { Country, UserApp } from '@/client/types/bussiness'
+import type { CountryApp, Country, UserApp } from '@/client/types/bussiness'
 import { useSessionStore } from '@/stores/session'
 
 export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
@@ -10,7 +10,7 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 
 	// State
 
-	const countries = ref<Country[]>([])
+	const countriesRef = ref<Country[]>([])
 
 	// Getters
 
@@ -27,6 +27,18 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 		}
 	})
 
+	const countries = computed((): CountryApp[] => {
+		return countriesRef.value.map((element: Country) => {
+			return <CountryApp>{
+				...element,
+				lifePercentage: Math.round((element.life * 100) / element.lifeMax),
+				shieldPercentage: Math.round(
+					(element.shield * 100) / element.shieldMax
+				),
+			}
+		})
+	})
+
 	const authUserLevelProgress = computed(() => {
 		if (!userRef.value) return 0
 		return Math.round((userRef.value.xp * 100) / userRef.value.levelXpMax)
@@ -34,9 +46,14 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 
 	// Actions
 
+	function upsetCountries(_countries: Country[]): void {
+		countriesRef.value = _countries
+	}
+
 	return {
 		currentUser,
 		countries,
 		authUserLevelProgress,
+		upsetCountries,
 	}
 })

@@ -14,7 +14,7 @@ export class NotifyService {
 		type: NotifyType = NotifyType.DEFAULT
 	): Promise<void> {
 		createToast(message, {
-			position: 'bottom-left',
+			position: 'bottom-right',
 			type: type,
 			transition: 'bounce',
 		})
