@@ -11,7 +11,12 @@ console.log(props.value.country.code)
 </script>
 
 <template>
-	<p>Side Bar works !</p>
+	<img
+		crossorigin="anonymous"
+		:src="props.country.flag"
+		class="country-flag object-fit-cover border rounded"
+		alt="country flag" />
+
 	{{ props.country.code }}
 </template>
 

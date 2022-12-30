@@ -22,6 +22,8 @@ const mapValue = ref<Record<string, object>>({})
 
 const offCanvasValues = ref<CountryApp | null>(null)
 
+const disabledReloadButton = ref<boolean>(false)
+
 function updateMap(): void {
 	const values = Object.assign(DEFAULT_COUNTRIES_VALUE, mapValue.value)
 	map.value = new svgMap({
@@ -77,6 +79,7 @@ async function getCountriesData() {
 		'Fetching countries data..., please wait !',
 		NotifyType.INFO
 	)
+	disabledReloadButton.value = true
 	try {
 		const countries = await CountryService.getCountries()
 
@@ -94,8 +97,10 @@ async function getCountriesData() {
 		}
 		mapValue.value = data
 		updateMap()
+		disabledReloadButton.value = false
 		NotifyService.notify('Countries data fetch complete !', NotifyType.SUCCESS)
 	} catch (error) {
+		disabledReloadButton.value = false
 		NotifyService.notify('Countries data fetch failed !', NotifyType.DANGER)
 	}
 }
@@ -125,6 +130,7 @@ onMounted(() => {
 					type="button"
 					title="Reload map data"
 					class="btn btn-outline-secondary"
+					:disabled="disabledReloadButton"
 					@click="getCountriesData()">
 					<i class="bi bi-arrow-clockwise"></i>
 				</button>
