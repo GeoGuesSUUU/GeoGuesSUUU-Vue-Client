@@ -1,3 +1,83 @@
 .country-flag {
     width: 100%;
 }
+
+.progress-dynamic {
+	animation: gradient 10s ease infinite;
+}
+
+.progress-heal {
+    background: linear-gradient(-45deg, #97f32e, #40e20e, #15e241, #10e694);
+    background-size: 500% 100%;
+}
+
+.progress-shield {
+    background: linear-gradient(-45deg, #24e6e6, #148bcf, #2370d5, #234cd5);
+    background-size: 500% 100%;
+}
+
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
+}
+
+.c-price {
+    border: none;
+    padding-block: 10px;
+    background-color: #fff700;
+    border-radius: 50px;
+
+    &.owner {
+        background-color: #00ff15;
+    }
+
+    &:hover {
+        cursor: pointer;
+        background-color: #ffd000;
+
+        &.owner {
+            background-color: #00db12;
+        }
+    }
+}
+
+.btn-commands {
+
+    .col {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .btn {
+        width: 100%;
+        padding-block: 10px;
+        margin: 10px;
+
+        font-size: large;
+        font-weight: bold;
+
+        &.support {
+            background-color: rgb(57, 223, 57);
+        }
+
+        &.attack {
+            background-color: rgb(223, 57, 57);
+        }
+
+        &.equipment {
+            background-color: rgb(57, 148, 223);
+        }
+
+        &.claim {
+            background-color: rgb(220, 223, 57);
+        }
+    }
+}

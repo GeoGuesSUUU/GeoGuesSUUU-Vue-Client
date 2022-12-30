@@ -46,6 +46,17 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 
 	// Actions
 
+	function upsetCountry(country: Country): void {
+		const index = countriesRef.value.findIndex(
+			(_country) => _country.id === country.id
+		)
+		if (index !== -1) {
+			countriesRef.value[index] = country
+		}
+		console.log(country)
+		console.log(countriesRef.value)
+	}
+
 	function upsetCountries(_countries: Country[]): void {
 		countriesRef.value = _countries
 	}
@@ -55,5 +66,6 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 		countries,
 		authUserLevelProgress,
 		upsetCountries,
+		upsetCountry,
 	}
 })

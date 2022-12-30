@@ -74,6 +74,21 @@ function getColor(country: Country) {
 	return start + end
 }
 
+function formatData(countries: Country[]): Record<string, object> {
+	const data = {}
+	for (const country of countries) {
+		data[country.code] = {
+			...DEFAULT_COUNTRY_VALUE,
+			owner: country.user?.name,
+			color: getColor(country),
+			life: `${country.life} / ${country.lifeMax}`,
+			shield: `${country.shield} / ${country.shieldMax}`,
+			price: `${country.price} coins`,
+		}
+	}
+	return data
+}
+
 async function getCountriesData() {
 	NotifyService.notify(
 		'Fetching countries data..., please wait !',
@@ -84,18 +99,7 @@ async function getCountriesData() {
 		const countries = await CountryService.getCountries()
 
 		upsetCountries(countries)
-		const data = {}
-		for (const country of countries) {
-			data[country.code] = {
-				...DEFAULT_COUNTRY_VALUE,
-				owner: country.user?.name,
-				color: getColor(country),
-				life: `${country.life} / ${country.lifeMax}`,
-				shield: `${country.shield} / ${country.shieldMax}`,
-				price: `${country.price} coins`,
-			}
-		}
-		mapValue.value = data
+		mapValue.value = formatData(countries)
 		updateMap()
 		disabledReloadButton.value = false
 		NotifyService.notify('Countries data fetch complete !', NotifyType.SUCCESS)
@@ -107,12 +111,14 @@ async function getCountriesData() {
 
 onMounted(() => {
 	updateMap()
+	mapValue.value = formatData(countries.value)
 	getCountriesData()
 
 	const myOffcanvas = document.getElementById('offcanvasExample')
 	myOffcanvas?.addEventListener('show.bs.offcanvas', (event: Event) => {
 		const id = (<Element>(<any>event).relatedTarget).getAttribute('data-id')
-		const target = countries.value.find((_country: Country) => _country.code === id) ?? null
+		const target =
+			countries.value.find((_country: Country) => _country.code === id) ?? null
 		offCanvasValues.value = target
 	})
 })
@@ -218,7 +224,9 @@ onMounted(() => {
 		data-bs-backdrop="false"
 		aria-labelledby="offcanvasExampleLabel">
 		<div class="offcanvas-header">
-			<h5 class="offcanvas-title" id="offcanvasExampleLabel">{{ offCanvasValues?.name }}</h5>
+			<h5 class="offcanvas-title" id="offcanvasExampleLabel">
+				{{ offCanvasValues?.name }}
+			</h5>
 			<button
 				type="button"
 				class="btn-close"
@@ -226,7 +234,11 @@ onMounted(() => {
 				aria-label="Close"></button>
 		</div>
 		<div class="offcanvas-body">
-			<MainGameSideBar v-if="offCanvasValues" :country="offCanvasValues"></MainGameSideBar>
+			<MainGameSideBar
+				v-if="offCanvasValues"
+				:country="offCanvasValues"
+				:locale="currentUser.locale"
+				@update-map="mapValue = formatData(countries); updateMap()"></MainGameSideBar>
 			<p v-else>No Data :[</p>
 		</div>
 	</div>
