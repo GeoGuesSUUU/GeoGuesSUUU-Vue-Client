@@ -1,6 +1,6 @@
 import { toRefs } from 'vue'
 import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
-import type { Country, CountryApp } from '../types/bussiness'
+import type { Country, CountryApp, ClaimRewards } from '../types/bussiness'
 import { api } from './api'
 
 const geoStore = useGeoguessuuuStore()
@@ -30,6 +30,22 @@ export class CountryService {
 
 		return (
 			await api<Country>(`/country/${country.id}/buy`, {
+				method: 'POST',
+			})
+		).items
+	}
+
+	static async claim(id?: number): Promise<ClaimRewards> {
+		if (id) {
+			return (
+				await api<ClaimRewards>(`/country/${id}/claim`, {
+					method: 'POST',
+				})
+			).items
+		}
+
+		return (
+			await api<ClaimRewards>(`/country/claim`, {
 				method: 'POST',
 			})
 		).items

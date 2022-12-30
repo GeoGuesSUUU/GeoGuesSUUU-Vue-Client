@@ -66,3 +66,8 @@ export interface CountryApp extends Country {
 	lifePercentage: number
 	shieldPercentage: number
 }
+
+export interface ClaimRewards {
+	coins: number
+	items: ItemSlot[]
+}

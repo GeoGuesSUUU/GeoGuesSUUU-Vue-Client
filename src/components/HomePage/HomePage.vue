@@ -14,7 +14,7 @@ import MainGameSideBar from '@/components/MainGameSideBar/MainGameSideBar.vue'
 const geoStore = useGeoguessuuuStore()
 
 const { currentUser, countries } = toRefs(geoStore)
-const { upsetCountries } = geoStore
+const { upsetCountries, addItemsInInventory } = geoStore
 
 const map = ref(null)
 
@@ -109,6 +109,26 @@ async function getCountriesData() {
 	}
 }
 
+async function claimAll() {
+	try {
+		const rewards = await CountryService.claim()
+		
+		if (currentUser.value.coins) {
+			currentUser.value.coins += rewards.coins
+		}
+
+		if (rewards.items.length > 0) {
+			addItemsInInventory(rewards.items)
+		}
+
+		NotifyService.notify(
+			`You have obtained ${rewards.coins} coins` + (rewards.items.length > 0 ? ` and ${rewards.items.length} items` : '')
+		)
+	} catch (error: any) {
+		NotifyService.notify(error.message, NotifyType.WARNING)
+	}
+}
+
 onMounted(() => {
 	updateMap()
 	mapValue.value = formatData(countries.value)
@@ -143,7 +163,8 @@ onMounted(() => {
 				<button
 					type="button"
 					title="Claim all rewards"
-					class="btn btn-outline-secondary">
+					class="btn btn-outline-secondary"
+					@click="claimAll()">
 					<i class="bi bi-coin"></i>
 				</button>
 				<div class="btn-group" role="group">

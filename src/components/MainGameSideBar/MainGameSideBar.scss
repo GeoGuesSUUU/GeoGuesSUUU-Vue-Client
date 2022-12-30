@@ -1,5 +1,7 @@
 .country-flag {
     width: 100%;
+    object-fit: fill;
+    object-position: center;
 }
 
 .progress-dynamic {
@@ -7,13 +9,13 @@
 }
 
 .progress-heal {
-    background: linear-gradient(-45deg, #97f32e, #40e20e, #15e241, #10e694);
-    background-size: 500% 100%;
+    background: linear-gradient(-45deg, #a7f32e, #40e20e, #15e241, #10e6b8);
+    background-size: 400% 100%;
 }
 
 .progress-shield {
-    background: linear-gradient(-45deg, #24e6e6, #148bcf, #2370d5, #234cd5);
-    background-size: 500% 100%;
+    background: linear-gradient(-45deg, #24e6e6, #148bcf, #2326d5, #4714d4);
+    background-size: 400% 100%;
 }
 
 @keyframes gradient {

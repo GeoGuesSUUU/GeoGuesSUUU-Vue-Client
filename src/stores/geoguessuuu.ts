@@ -1,6 +1,11 @@
 import { defineStore } from 'pinia'
 import { ref, computed, toRefs } from 'vue'
-import type { CountryApp, Country, UserApp } from '@/client/types/bussiness'
+import type {
+	CountryApp,
+	Country,
+	UserApp,
+	ItemSlot,
+} from '@/client/types/bussiness'
 import { useSessionStore } from '@/stores/session'
 
 export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
@@ -53,12 +58,32 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 		if (index !== -1) {
 			countriesRef.value[index] = country
 		}
-		console.log(country)
-		console.log(countriesRef.value)
 	}
 
 	function upsetCountries(_countries: Country[]): void {
 		countriesRef.value = _countries
+	}
+
+	function addItemsInInventory(items: ItemSlot[]) {
+		items.forEach((element) => {
+			if (!userRef.value || !userRef.value.userItems) return
+			const index = userRef.value.userItems.findIndex(
+				(_item) => _item.itemType.id === element.itemType.id
+			)
+
+			if (index && index !== -1) {
+				userRef.value.userItems[index] = element
+			} else {
+				userRef.value.userItems[index].quantity += element.quantity
+			}
+		})
+	}
+
+	function updateClaimDate(id: number) {
+		const index = countriesRef.value.findIndex((_country) => _country.id === id)
+		if (index !== -1) {
+			countriesRef.value[index].claimDate = new Date()
+		}
 	}
 
 	return {
@@ -67,5 +92,7 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 		authUserLevelProgress,
 		upsetCountries,
 		upsetCountry,
+		addItemsInInventory,
+		updateClaimDate,
 	}
 })

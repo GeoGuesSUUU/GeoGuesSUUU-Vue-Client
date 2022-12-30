@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, toRefs } from 'vue'
+import { ref, toRefs, onUpdated, onBeforeUnmount, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
 import { CountryService } from '../../client/services/country-service'
@@ -9,7 +9,7 @@ import type { CountryApp } from '../../client/types/bussiness'
 const geoStore = useGeoguessuuuStore()
 
 const { currentUser } = toRefs(geoStore)
-const { upsetCountry } = geoStore
+const { upsetCountry, addItemsInInventory, updateClaimDate } = geoStore
 
 const ps = defineProps<{
 	country: CountryApp
@@ -30,8 +30,7 @@ function getShieldLabel(): string {
 
 function getDateLabel(): string {
 	const d = new Date(props.value.country.ownedAt).getTime()
-	const n = new Date(Date.now()).getTime()
-	if (d > n) return `no date`
+	if (d > new Date().getTime()) return `no date`
 
 	return new Date(props.value.country.ownedAt).toLocaleDateString(
 		props.value.locale ?? 'en-US',
@@ -50,11 +49,82 @@ function getDateLabel(): string {
 async function buyCountry() {
 	try {
 		const country = await CountryService.buy(props.value.country)
+		if (currentUser.value.coins) {
+			currentUser.value.coins -= props.value.country.price
+		}
 		upsetCountry(country)
 		emit('update-map')
 		NotifyService.notify(
 			`You have bought ${props.value.country.name} succefully`,
 			NotifyType.SUCCESS
+		)
+	} catch (error: any) {
+		NotifyService.notify(error.message, NotifyType.WARNING)
+	}
+}
+
+const remainingTime = ref(0)
+const interval = ref(0)
+
+onMounted(() => {
+	if (props.value.country.user?.id === currentUser.value.id) {
+		remainingTime.value = (() => {
+			const date = new Date(props.value.country.claimDate).getTime()
+			const res = date + 86400000 - new Date().getTime()
+			return res > 0 ? res : 0
+		})()
+
+		interval.value = setTimeout(() => {
+			if (remainingTime.value > 0) remainingTime.value--
+		}, 1000)
+	}
+})
+
+onUpdated(() => {
+	clearTimeout(interval.value)
+	if (props.value.country.user?.id === currentUser.value.id) {
+		remainingTime.value = (() => {
+			const date = new Date(props.value.country.claimDate).getTime()
+			const res = date + 86400000 - new Date().getTime()
+			console.log(res)
+			return res > 0 ? res : 0
+		})()
+
+		interval.value = setTimeout(() => {
+			if (remainingTime.value > 0) remainingTime.value--
+		}, 1000)
+	}
+})
+
+onBeforeUnmount(() => {
+	clearTimeout(interval.value)
+})
+
+function getRemainingTime(): string {
+	const d = new Date(0)
+	d.setSeconds(remainingTime.value / 1000)
+	return d.toISOString().substring(11, 19)
+}
+
+async function claimById() {
+	try {
+		const rewards = await CountryService.claim(props.value.country.id)
+
+		if (currentUser.value.coins) {
+			currentUser.value.coins += rewards.coins
+		}
+
+		if (rewards.items.length > 0) {
+			addItemsInInventory(rewards.items)
+		}
+
+		props.value.country.claimDate = new Date()
+		remainingTime.value = Date.now() + 86400000 - new Date().getTime()
+		updateClaimDate(props.value.country.id)
+
+		NotifyService.notify(
+			`You have obtained ${rewards.coins} coins` +
+				(rewards.items.length > 0 ? ` and ${rewards.items.length} items` : '')
 		)
 	} catch (error: any) {
 		NotifyService.notify(error.message, NotifyType.WARNING)
@@ -169,7 +239,9 @@ async function buyCountry() {
 					<button
 						type="button"
 						class="btn attack"
-						:disabled="props.country.user?.id === currentUser.id">
+						:disabled="
+							!props.country.user || props.country.user.id === currentUser.id
+						">
 						<img src="/src/assets/attack.svg" alt="country-price" width="30" />
 						Attack
 					</button>
@@ -190,9 +262,20 @@ async function buyCountry() {
 					<button
 						type="button"
 						class="btn claim"
-						:disabled="props.country.user?.id !== currentUser.id">
-						<img src="/src/assets/coins.svg" alt="country-price" width="30" />
-						Claim
+						:disabled="
+							props.country.user?.id !== currentUser.id || remainingTime > 0
+						"
+						@click="claimById">
+						<div
+							v-if="
+								props.country.user?.id === currentUser.id && remainingTime > 0
+							">
+							{{ getRemainingTime() }}
+						</div>
+						<div v-else>
+							<img src="/src/assets/coins.svg" alt="country-price" width="30" />
+							Claim
+						</div>
 					</button>
 				</div>
 			</div>
