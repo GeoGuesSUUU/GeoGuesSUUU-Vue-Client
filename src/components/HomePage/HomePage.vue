@@ -7,9 +7,9 @@ import {
 } from '@/assets/default_countries'
 import { CountryService } from '@/client/services/country-service'
 import type { Country, CountryApp } from '@/client/types/bussiness'
+import MainGameSideBar from '@/components/MainGameSideBar/MainGameSideBar.vue'
 import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
 import { NotifyService, NotifyType } from '../../client/services/notify-service'
-import MainGameSideBar from '@/components/MainGameSideBar/MainGameSideBar.vue'
 
 const geoStore = useGeoguessuuuStore()
 
@@ -112,7 +112,7 @@ async function getCountriesData() {
 async function claimAll() {
 	try {
 		const rewards = await CountryService.claim()
-		
+
 		if (currentUser.value.coins) {
 			currentUser.value.coins += rewards.coins
 		}
@@ -122,7 +122,8 @@ async function claimAll() {
 		}
 
 		NotifyService.notify(
-			`You have obtained ${rewards.coins} coins` + (rewards.items.length > 0 ? ` and ${rewards.items.length} items` : '')
+			`You have obtained ${rewards.coins} coins` +
+				(rewards.items.length > 0 ? ` and ${rewards.items.length} items` : '')
 		)
 	} catch (error: any) {
 		NotifyService.notify(error.message, NotifyType.WARNING)
@@ -135,13 +136,19 @@ onMounted(() => {
 	getCountriesData()
 
 	const myOffcanvas = document.getElementById('offcanvasExample')
-	myOffcanvas?.addEventListener('show.bs.offcanvas', (event: Event) => {
-		const id = (<Element>(<any>event).relatedTarget).getAttribute('data-id')
+	myOffcanvas?.addEventListener('show.bs.offcanvas', (event: any) => {
+		const btnCountry: Element = event.relatedTarget
+		const id = btnCountry.getAttribute('data-id')
 		const target =
-			countries.value.find((_country: Country) => _country.code === id) ?? null
+			countries.value.find((_country) => _country.code === id) ?? null
 		offCanvasValues.value = target
 	})
 })
+
+function upMap(): void {
+	mapValue.value = formatData(countries.value)
+	updateMap()
+}
 </script>
 
 <template>
@@ -231,7 +238,7 @@ onMounted(() => {
 			</div>
 		</div>
 		<div class="mb-5">
-			<div class="card px-5 border rounded-3 shadow-lg">
+			<div class="card border rounded-3 shadow-lg">
 				<div id="svgMap"></div>
 			</div>
 		</div>
@@ -259,7 +266,7 @@ onMounted(() => {
 				v-if="offCanvasValues"
 				:country="offCanvasValues"
 				:locale="currentUser.locale"
-				@update-map="mapValue = formatData(countries); updateMap()"></MainGameSideBar>
+				@update-map="upMap()"></MainGameSideBar>
 			<p v-else>No Data :[</p>
 		</div>
 	</div>

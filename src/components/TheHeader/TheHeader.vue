@@ -3,6 +3,8 @@ import { ref, toRefs } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
 import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
 import { useSessionStore } from '@/stores/session'
+import HeaderSettingModal from '../HeaderSettingModal/HeaderSettingModal.vue'
+import InventoryModal from '../InventoryModal/InventoryModal.vue'
 
 const geoStore = useGeoguessuuuStore()
 const sessionStore = useSessionStore()
@@ -137,7 +139,7 @@ function getLevelLabel() {
 									type="button"
 									class="dropdown-item"
 									data-bs-toggle="modal"
-									data-bs-target="#exampleModal">
+									data-bs-target="#headerModal">
 									<i class="bi bi-gear mx-1"></i>
 									Settings
 								</button>
@@ -156,44 +158,9 @@ function getLevelLabel() {
 		</div>
 	</header>
 
-	<!-- Modal -->
-	<div
-		class="modal fade"
-		id="exampleModal"
-		tabindex="-1"
-		aria-labelledby="exampleModalLabel"
-		aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="exampleModalLabel">Settings</h1>
-					<button
-						type="button"
-						class="btn-close"
-						data-bs-dismiss="modal"
-						aria-label="Close"></button>
-				</div>
-				<div class="modal-body">
-					...
-					<h2>Ideas :</h2>
-					<ul>
-						<li>Darkmode</li>
-						<li>Map color</li>
-						<li>User locale</li>
-					</ul>
-				</div>
-				<div class="modal-footer">
-					<button
-						type="button"
-						class="btn btn-secondary"
-						data-bs-dismiss="modal">
-						Close
-					</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
-				</div>
-			</div>
-		</div>
-	</div>
+	<!-- Modals -->
+	<HeaderSettingModal></HeaderSettingModal>
+	<InventoryModal></InventoryModal>
 </template>
 
 <style scoped src="./TheHeader.scss"></style>

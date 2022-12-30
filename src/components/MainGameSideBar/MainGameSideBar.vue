@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, toRefs, onUpdated, onBeforeUnmount, onMounted } from 'vue'
 import { RouterLink } from 'vue-router'
+import { callModalInventory } from '@/client/services/event-service'
 import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
 import { CountryService } from '../../client/services/country-service'
 import { NotifyService, NotifyType } from '../../client/services/notify-service'
@@ -20,19 +21,21 @@ const emit = defineEmits(['update-map'])
 
 const props = ref(ps)
 
+const propCountry = ref<CountryApp>(props.value.country)
+
 function getLifeLabel(): string {
-	return `${props.value.country.life} / ${props.value.country.lifeMax} (${props.value.country.lifePercentage}%)`
+	return `${propCountry.value.life} / ${propCountry.value.lifeMax} (${propCountry.value.lifePercentage}%)`
 }
 
 function getShieldLabel(): string {
-	return `${props.value.country.shield} / ${props.value.country.shieldMax} (${props.value.country.shieldPercentage}%)`
+	return `${propCountry.value.shield} / ${propCountry.value.shieldMax} (${propCountry.value.shieldPercentage}%)`
 }
 
 function getDateLabel(): string {
-	const d = new Date(props.value.country.ownedAt).getTime()
+	const d = new Date(propCountry.value.ownedAt).getTime()
 	if (d > new Date().getTime()) return `no date`
 
-	return new Date(props.value.country.ownedAt).toLocaleDateString(
+	return new Date(propCountry.value.ownedAt).toLocaleDateString(
 		props.value.locale ?? 'en-US',
 		{
 			weekday: 'long',
@@ -48,14 +51,15 @@ function getDateLabel(): string {
 
 async function buyCountry() {
 	try {
-		const country = await CountryService.buy(props.value.country)
+		const country = await CountryService.buy(propCountry.value)
 		if (currentUser.value.coins) {
-			currentUser.value.coins -= props.value.country.price
+			currentUser.value.coins -= propCountry.value.price
 		}
+		propCountry.value = Object.assign(propCountry.value, country)
 		upsetCountry(country)
 		emit('update-map')
 		NotifyService.notify(
-			`You have bought ${props.value.country.name} succefully`,
+			`You have bought ${propCountry.value.name} succefully`,
 			NotifyType.SUCCESS
 		)
 	} catch (error: any) {
@@ -67,9 +71,9 @@ const remainingTime = ref(0)
 const interval = ref(0)
 
 onMounted(() => {
-	if (props.value.country.user?.id === currentUser.value.id) {
+	if (propCountry.value.user?.id === currentUser.value.id) {
 		remainingTime.value = (() => {
-			const date = new Date(props.value.country.claimDate).getTime()
+			const date = new Date(propCountry.value.claimDate).getTime()
 			const res = date + 86400000 - new Date().getTime()
 			return res > 0 ? res : 0
 		})()
@@ -78,15 +82,22 @@ onMounted(() => {
 			if (remainingTime.value > 0) remainingTime.value--
 		}, 1000)
 	}
+
+	const inventoryModal = document.getElementById('inventoryModal')
+	inventoryModal?.addEventListener('show.bs.modal', (event: any) => {
+		const button: Element = event.relatedTarget
+		const type = button.getAttribute('data-bs-type')
+		const countryId = button.getAttribute('data-bs-country-id')
+		if (type && countryId) callModalInventory(type, +countryId)
+	})
 })
 
 onUpdated(() => {
 	clearTimeout(interval.value)
-	if (props.value.country.user?.id === currentUser.value.id) {
+	if (propCountry.value.user?.id === currentUser.value.id) {
 		remainingTime.value = (() => {
-			const date = new Date(props.value.country.claimDate).getTime()
+			const date = new Date(propCountry.value.claimDate).getTime()
 			const res = date + 86400000 - new Date().getTime()
-			console.log(res)
 			return res > 0 ? res : 0
 		})()
 
@@ -108,7 +119,7 @@ function getRemainingTime(): string {
 
 async function claimById() {
 	try {
-		const rewards = await CountryService.claim(props.value.country.id)
+		const rewards = await CountryService.claim(propCountry.value.id)
 
 		if (currentUser.value.coins) {
 			currentUser.value.coins += rewards.coins
@@ -118,9 +129,9 @@ async function claimById() {
 			addItemsInInventory(rewards.items)
 		}
 
-		props.value.country.claimDate = new Date()
+		propCountry.value.claimDate = new Date()
 		remainingTime.value = Date.now() + 86400000 - new Date().getTime()
-		updateClaimDate(props.value.country.id)
+		updateClaimDate(propCountry.value.id)
 
 		NotifyService.notify(
 			`You have obtained ${rewards.coins} coins` +
@@ -230,6 +241,10 @@ async function claimById() {
 					<button
 						type="button"
 						class="btn support"
+						data-bs-toggle="modal"
+						data-bs-target="#inventoryModal"
+						data-bs-type="support"
+						:data-bs-country-id="props.country.id"
 						:disabled="props.country.user?.id !== currentUser.id">
 						<img src="/src/assets/heal.svg" alt="country-price" width="30" />
 						Support
@@ -237,8 +252,13 @@ async function claimById() {
 				</div>
 				<div class="col">
 					<button
+						id="btn-attack"
 						type="button"
 						class="btn attack"
+						data-bs-toggle="modal"
+						data-bs-target="#inventoryModal"
+						data-bs-type="attack"
+						:data-bs-country-id="props.country.id"
 						:disabled="
 							!props.country.user || props.country.user.id === currentUser.id
 						">
@@ -250,6 +270,10 @@ async function claimById() {
 					<button
 						type="button"
 						class="btn equipment"
+						data-bs-toggle="modal"
+						data-bs-target="#inventoryModal"
+						data-bs-type="equipment"
+						:data-bs-country-id="props.country.id"
 						:disabled="props.country.user?.id !== currentUser.id">
 						<img
 							src="/src/assets/monument.svg"

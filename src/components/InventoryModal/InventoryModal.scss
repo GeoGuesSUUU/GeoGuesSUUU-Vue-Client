@@ -1,0 +1,35 @@
+.inventory {
+    .card {
+        --inventory-card-color: var(--rarety-common);
+        max-width: 300px;
+        overflow-x: hidden;
+        border-color: var(--inventory-card-color);
+        border-width: medium;
+        transition: all 0.25s;
+
+        &:hover {
+            cursor: pointer;
+        }
+
+        .card-header {
+            color: var(--inventory-card-color);
+            font-weight: bold;
+        }
+
+        img {
+            width: 200px;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .badge {
+            background-color: var(--inventory-card-color);
+        }
+
+        &.selectedItem {
+            box-shadow:
+                0px 16px 17px rgba(0, 221, 99, 0.31);
+                transform: scale(1.02);
+        }
+    }
+}
