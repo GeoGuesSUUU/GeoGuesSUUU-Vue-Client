@@ -71,18 +71,61 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 				(_item) => _item.itemType.id === element.itemType.id
 			)
 
-			if (index && index !== -1) {
-				userRef.value.userItems[index] = element
-			} else {
+			if (index !== -1) {
 				userRef.value.userItems[index].quantity += element.quantity
+			} else {
+				userRef.value.userItems[index] = element
 			}
 		})
+	}
+
+	function removeItemInInventory(item: ItemSlot) {
+		if (!userRef.value || !userRef.value.userItems) return
+		const index = userRef.value.userItems.findIndex(
+			(_item) => _item.itemType.id === item.itemType.id
+		)
+
+		if (index !== -1) {
+			if (userRef.value.userItems[index].quantity > 1) {
+				userRef.value.userItems[index].quantity--
+			} else {
+				userRef.value.userItems.splice(index, 1)
+			}
+		}
 	}
 
 	function updateClaimDate(id: number) {
 		const index = countriesRef.value.findIndex((_country) => _country.id === id)
 		if (index !== -1) {
 			countriesRef.value[index].claimDate = new Date()
+		}
+	}
+
+	function updateLifeAndShield(ref: {
+		id: number
+		life: number
+		lifeMax: number
+		shield: number
+		shieldMax: number
+	}) {
+		const index = countriesRef.value.findIndex(
+			(_country) => _country.id === ref.id
+		)
+		if (index !== -1) {
+			countriesRef.value[index].life = ref.life
+			countriesRef.value[index].lifeMax = ref.lifeMax
+			countriesRef.value[index].shield = ref.shield
+			countriesRef.value[index].shieldMax = ref.shieldMax
+		}
+	}
+
+	function updateAfterAttack(country: Country) {
+		updateLifeAndShield(country)
+		const index = countriesRef.value.findIndex(
+			(_country) => _country.id === country.id
+		)
+		if (index !== -1) {
+			countriesRef.value[index].user = country.user
 		}
 	}
 
@@ -94,5 +137,8 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 		upsetCountry,
 		addItemsInInventory,
 		updateClaimDate,
+		removeItemInInventory,
+		updateLifeAndShield,
+		updateAfterAttack,
 	}
 })

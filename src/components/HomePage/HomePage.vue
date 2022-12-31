@@ -6,6 +6,7 @@ import {
 	DEFAULT_COUNTRIES_VALUE,
 } from '@/assets/default_countries'
 import { CountryService } from '@/client/services/country-service'
+import { eventEmitter } from '@/client/services/event-service'
 import type { Country, CountryApp } from '@/client/types/bussiness'
 import MainGameSideBar from '@/components/MainGameSideBar/MainGameSideBar.vue'
 import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
@@ -130,6 +131,8 @@ async function claimAll() {
 	}
 }
 
+const targetId = ref<string | null>(null)
+
 onMounted(() => {
 	updateMap()
 	mapValue.value = formatData(countries.value)
@@ -139,9 +142,13 @@ onMounted(() => {
 	myOffcanvas?.addEventListener('show.bs.offcanvas', (event: any) => {
 		const btnCountry: Element = event.relatedTarget
 		const id = btnCountry.getAttribute('data-id')
+		targetId.value = id
 		const target =
 			countries.value.find((_country) => _country.code === id) ?? null
 		offCanvasValues.value = target
+	})
+	myOffcanvas?.addEventListener('hide.bs.offcanvas', () => {
+		targetId.value = null
 	})
 })
 
@@ -149,6 +156,14 @@ function upMap(): void {
 	mapValue.value = formatData(countries.value)
 	updateMap()
 }
+
+eventEmitter.on('@UpWorldMap', () => upMap())
+eventEmitter.on('@UpCountry', () => {
+	if (!targetId.value) return
+	const target =
+		countries.value.find((_country) => _country.code === targetId.value) ?? null
+	offCanvasValues.value = target
+})
 </script>
 
 <template>
@@ -266,6 +281,7 @@ function upMap(): void {
 				v-if="offCanvasValues"
 				:country="offCanvasValues"
 				:locale="currentUser.locale"
+				:key="offCanvasValues.id"
 				@update-map="upMap()"></MainGameSideBar>
 			<p v-else>No Data :[</p>
 		</div>

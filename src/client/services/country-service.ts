@@ -1,16 +1,11 @@
-import { toRefs } from 'vue'
-import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
 import type {
 	Country,
 	CountryApp,
 	ClaimRewards,
 	Item,
+	UserApp,
 } from '../types/bussiness'
 import { api } from './api'
-
-const geoStore = useGeoguessuuuStore()
-
-const { currentUser } = toRefs(geoStore)
 
 export class CountryService {
 	static async getCountries(): Promise<Country[]> {
@@ -21,15 +16,16 @@ export class CountryService {
 		).items
 	}
 
-	static async buy(country: CountryApp): Promise<Country> {
+	static async buy(country: CountryApp, user: UserApp): Promise<Country> {
+		console.log(country)
 		if (country.user) {
-			if (country.user.id === currentUser.value.id) {
+			if (country.user.id === user.id) {
 				throw new Error('You already own this country')
 			}
 			throw new Error('Someone already owns this country')
 		}
 
-		if (country.price > (currentUser.value.coins ?? 0)) {
+		if (country.price > (user.coins ?? 0)) {
 			throw new Error("You don't have enough coins")
 		}
 

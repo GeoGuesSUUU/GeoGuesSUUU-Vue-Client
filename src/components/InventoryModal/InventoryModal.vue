@@ -1,14 +1,22 @@
 <script setup lang="ts">
 import { computed, ref, toRefs } from 'vue'
-import { eventEmitter } from '@/client/services/event-service'
+import { CountryService } from '@/client/services/country-service'
+import {
+	eventEmitter,
+	upWorldMapEmit,
+	updateCountryEmit,
+} from '@/client/services/event-service'
+import { NotifyService, NotifyType } from '@/client/services/notify-service'
 import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
-import { CountryService } from '../../client/services/country-service'
 import type { CountryApp, ItemSlot } from '../../client/types/bussiness'
 
 const geoStore = useGeoguessuuuStore()
 
 const { currentUser, countries } = toRefs(geoStore)
+const { removeItemInInventory, updateLifeAndShield, updateAfterAttack } =
+	geoStore
 const selectValue = ref('all')
+const action = ref<string | null>(null)
 const target = ref<CountryApp | null>(null)
 const selectedItem = ref<ItemSlot | null>(null)
 
@@ -32,22 +40,62 @@ function setSelectedItem(item: ItemSlot) {
 	selectedItem.value = item
 }
 
-async function submit(): Promise<void> {
-	// if (!target.value || !selectedItem.value) return
+async function attackCountry(): Promise<void> {
+	if (!target.value || !selectedItem.value) return
+	try {
+		const country = await CountryService.attack(
+			target.value,
+			selectedItem.value.itemType
+		)
 
-	// if (selectValue.value === 'attack') {
-	// 	const country = await CountryService.attack(
-	// 		target.value,
-	// 		selectedItem.value.itemType
-	// 	)
-	// } else if (selectValue.value === 'support') {
-	// 	const country = await CountryService.support(
-	// 		target.value,
-	// 		selectedItem.value.itemType
-	// 	)
-	// } else if (selectValue.value === 'equipment') {
-	// 	await CountryService.addEquipment(target.value, selectedItem.value.itemType)
-	// }
+		removeItemInInventory(selectedItem.value)
+		updateAfterAttack(country)
+		updateCountryEmit(country)
+		upWorldMapEmit()
+		NotifyService.notify('The attack was a success !', NotifyType.SUCCESS)
+	} catch (error: any) {
+		NotifyService.notify(error.message, NotifyType.WARNING)
+	}
+}
+
+async function supportCountry(): Promise<void> {
+	if (!target.value || !selectedItem.value) return
+	try {
+		const country = await CountryService.support(
+			target.value,
+			selectedItem.value.itemType
+		)
+
+		removeItemInInventory(selectedItem.value)
+		updateLifeAndShield(country)
+		updateCountryEmit(country)
+		upWorldMapEmit()
+		NotifyService.notify('The support was a success !', NotifyType.SUCCESS)
+	} catch (error: any) {
+		NotifyService.notify(error.message, NotifyType.WARNING)
+	}
+}
+
+async function equipCountry(): Promise<void> {
+	if (!target.value || !selectedItem.value) return
+	try {
+		await CountryService.addEquipment(target.value, selectedItem.value.itemType)
+
+		removeItemInInventory(selectedItem.value)
+		NotifyService.notify('The equipment has been added !', NotifyType.SUCCESS)
+	} catch (error: any) {
+		NotifyService.notify(error.message, NotifyType.WARNING)
+	}
+}
+
+function submit(): void {
+	if (action.value === 'attack') {
+		attackCountry()
+	} else if (action.value === 'support') {
+		supportCountry()
+	} else if (action.value === 'equipment') {
+		equipCountry()
+	}
 }
 
 eventEmitter.on(
@@ -56,6 +104,7 @@ eventEmitter.on(
 		selectValue.value = res.type
 		target.value =
 			countries.value.find((_country) => _country.id === res.countryId) ?? null
+		action.value = res.type
 		filterItems()
 	}
 )
@@ -132,11 +181,13 @@ eventEmitter.on(
 						Close
 					</button>
 					<button
-						v-if="target"
+						v-if="target && action"
 						type="button"
 						class="btn btn-primary"
-						@click="submit()">
-						Save changes
+						@click="submit()"
+						:disabled="!selectedItem"
+						data-bs-dismiss="modal">
+						{{ action.toUpperCase() }}
 					</button>
 				</div>
 			</div>
