@@ -73,7 +73,7 @@ async function buyCountry() {
 }
 
 const remainingTime = ref(0)
-const interval = ref(0)
+const interval = ref<number>(0)
 
 onMounted(() => {
 	if (props.value.country.user?.id === currentUser.value.id) {
@@ -82,8 +82,7 @@ onMounted(() => {
 			const res = date + 86400000 - new Date().getTime()
 			return res > 0 ? res : 0
 		})()
-
-		interval.value = setTimeout(() => {
+		interval.value = window.setTimeout(() => {
 			if (remainingTime.value > 0) remainingTime.value--
 		}, 1000)
 	}
@@ -106,7 +105,7 @@ onUpdated(() => {
 			return res > 0 ? res : 0
 		})()
 
-		interval.value = setTimeout(() => {
+		interval.value = window.setTimeout(() => {
 			if (remainingTime.value > 0) remainingTime.value--
 		}, 1000)
 	}
