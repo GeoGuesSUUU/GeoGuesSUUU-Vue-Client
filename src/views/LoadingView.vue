@@ -10,10 +10,13 @@ const { user, defaultEmail, defaultPassword, login } = sessionStore
 async function loadUser() {
 	if (!defaultEmail || !defaultPassword) router.push({ name: 'login' })
 
+	const params = router.currentRoute.value.query?.params?.toString()
+
 	try {
 		await login()
 		router.push({
 			name: router.currentRoute.value.query?.name?.toString() || 'home',
+			params: params ? JSON.parse(params) : {},
 		})
 	} catch (error) {
 		router.push({ name: 'login' })

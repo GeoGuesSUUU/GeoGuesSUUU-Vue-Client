@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { ref, toRefs } from 'vue'
 import { RouterLink, useRouter } from 'vue-router'
+import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
 import { useSessionStore } from '@/stores/session'
 
+const geoStore = useGeoguessuuuStore()
 const sessionStore = useSessionStore()
 const router = useRouter()
 
-const { user } = toRefs(sessionStore)
+const { currentUser } = toRefs(geoStore)
 const { logout } = sessionStore
 
 const searchGame = ref('')
@@ -20,12 +22,19 @@ async function signout() {
 	await logout()
 	router.push({ name: 'login' })
 }
+
+function getLevelLabel() {
+	const min = currentUser.value.levelXpMin
+	const xp = currentUser.value.xp
+	const max = currentUser.value.levelXpMax
+	return `${xp - min} / ${max - min} (${currentUser.value.levelProgress}%)`
+}
 </script>
 
 <template>
 	<header class="px-3 mb-3 border-bottom">
 		<div class="container">
-			<div class="d-flex flex-row justify-content-between">
+			<div class="header-components d-flex flex-row justify-content-between">
 				<ul class="page-links nav mb-2 justify-content-center mb-md-0">
 					<li>
 						<router-link
@@ -61,7 +70,7 @@ async function signout() {
 				</div>
 				<div
 					class="tool-page-links d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-					<form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search">
+					<form class="mx-2" role="search">
 						<input
 							type="search"
 							class="form-control"
@@ -87,25 +96,29 @@ async function signout() {
 						<ul class="dropdown-menu text-small">
 							<li>
 								<div class="user-info">
-									<p class="username">{{ user?.name }}</p>
+									<div class="dropdown-header">
+										<p class="username">{{ currentUser?.name }}</p>
+										<span class="badge text-bg-primary">
+											Lvl. {{ currentUser.level }}
+										</span>
+									</div>
 									<hr class="hr" />
 									<div class="money-div d-flex flex-row">
 										<img
 											src="/src/assets/coins.svg"
 											alt="user coins"
 											width="30" />
-										<span>{{ user?.coins ?? 0 }}</span>
+										<span>{{ currentUser?.coins ?? 0 }}</span>
 									</div>
 									<div class="xp-div d-flex flex-row">
 										<img src="/src/assets/xp.svg" alt="user xp" width="35" />
-										<div
-											class="progress"
-											role="progressbar"
-											aria-label="Basic example"
-											aria-valuenow="33"
-											aria-valuemin="0"
-											aria-valuemax="100">
-											<div class="progress-bar" style="width: 33%"></div>
+										<div>
+											<div class="progress" role="progressbar">
+												<div
+													class="progress-bar"
+													:style="`width: ${currentUser.levelProgress}%`"></div>
+											</div>
+											<p class="level-label">{{ getLevelLabel() }}</p>
 										</div>
 									</div>
 								</div>
@@ -113,7 +126,7 @@ async function signout() {
 							</li>
 							<li>
 								<router-link
-									:to="{ name: 'user', params: { id: user?.id } }"
+									:to="{ name: 'user', params: { id: currentUser?.id } }"
 									class="dropdown-item">
 									<i class="bi bi-person-circle mx-1"></i>
 									Profile

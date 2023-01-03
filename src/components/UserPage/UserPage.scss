@@ -1,0 +1,100 @@
+.main-card {
+    margin-inline: 40px;
+    margin-top: 100px;
+
+    .user-info {
+        position: relative;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .user-pic {
+            position: relative;
+            top: -50px;
+            margin-inline: 40px;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        .user-info-stat {
+            width: 100%;
+
+            h2 {
+                font-size: 50px;
+            }
+
+            .money-div {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+
+                span {
+                    margin-left: 5px;
+                    font-size: large;
+                    font-weight: lighter;
+                }
+
+                img {
+                    margin-inline: 5px;
+                }
+            }
+
+            .xp-div {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+
+                .progress {
+                    height: 15px;
+                    width: 150px;
+                }
+
+                img {
+                    margin-left: 2.5px;
+                }
+
+                .level-label {
+                    margin-bottom: 0;
+                    font-weight: lighter;
+                    font-size: medium;
+                }
+
+                .level-badge {
+                    margin-left: 10px;
+                }
+            }
+        }
+    }
+
+    .inventory {
+        .card {
+            --inventory-card-color: var(--rarety-common)
+            max-width: 300px;
+            overflow-x: hidden;
+            border-color: var(--inventory-card-color);
+            border-width: medium;
+
+            .card-header {
+                color: var(--inventory-card-color);
+                font-weight: bold;
+            }
+
+            img {
+                width: 300px;
+                object-fit: cover;
+                object-position: center;
+            }
+
+            .badge {
+                background-color: var(--inventory-card-color);
+            }
+        }
+    }
+}
+
+.bi-patch-check-fill {
+    color: rgb(0, 241, 52)
+}

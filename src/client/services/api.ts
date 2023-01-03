@@ -1,9 +1,10 @@
 import axios from 'axios'
 import { useSessionStore } from '@/stores/session'
+import type { ApiReponse } from '../types/api-response'
 
 interface ApiRequest {
 	method: 'GET' | 'POST' | 'DELETE' | 'PATCH' | 'PUT'
-	body: object
+	body?: object
 }
 
 export const BASE_URL = 'http://localhost:8000/api'
@@ -12,7 +13,7 @@ export async function api<T = any>(
 	url: string,
 	data: ApiRequest,
 	token = true
-): Promise<Awaited<T>> {
+): Promise<Awaited<ApiReponse<T>>> {
 	const session = useSessionStore()
 
 	return (
@@ -24,7 +25,7 @@ export async function api<T = any>(
 				'Access-Control-Allow-Origin': '*',
 				Authorization: token ? `Bearer ${session.token}` : '',
 			},
-			data: data.body,
+			data: data?.body,
 		})
 	).data
 }
