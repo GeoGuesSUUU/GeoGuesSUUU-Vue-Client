@@ -60,3 +60,39 @@
   box-sizing: border-box;
   margin: 0;
 }
+
+*[fill^="#F00"].critical-life {
+  animation: critical-red 2s ease infinite;
+}
+
+*[fill^="#0F0"].critical-life {
+  animation: critical-green 2s ease infinite;
+}
+
+@keyframes critical-red {
+  0% {
+      fill: #F00F;
+  }
+
+  50% {
+      fill: #F005;
+  }
+
+  100% {
+      fill: #F00F;
+  }
+}
+
+@keyframes critical-green {
+  0% {
+      fill: #0F0F;
+  }
+
+  50% {
+      fill: #0F05;
+  }
+
+  100% {
+      fill: #0F0F;
+  }
+}

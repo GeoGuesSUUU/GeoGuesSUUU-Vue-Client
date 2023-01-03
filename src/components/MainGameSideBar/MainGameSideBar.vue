@@ -160,9 +160,15 @@ async function claimById() {
 			<div class="country-life mt-3 d-flex flex-row">
 				<img src="/src/assets/heal.svg" alt="user xp" width="35" />
 				<div class="d-flex mx-2 flex-column w-100 align-content-center">
-					<div class="progress" role="progressbar">
+					<div
+						class="progress"
+						role="progressbar"
+						:class="{
+							criticalLifeBar: (props.country.lifePercentage * 15) / 100 <= 1,
+						}">
 						<div
 							class="progress-bar progress-heal progress-dynamic"
+							:class="{ ownerless: !props.country.user }"
 							:style="`width: ${props.country.lifePercentage}%`"></div>
 					</div>
 					<p class="m-0 life-shield-label">
