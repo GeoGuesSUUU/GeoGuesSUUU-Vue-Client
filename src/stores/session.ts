@@ -2,20 +2,35 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 import { api } from '@/client/services/api'
 import type { ApiLoginReponse } from '@/client/types/api-response'
-import type { User } from '@/client/types/bussiness'
-
-const defaultEmail = localStorage.getItem('email') || ''
-const defaultPassword = localStorage.getItem('password') || ''
-const token = localStorage.getItem('token') || ''
+import type { UserDetails } from '../client/types/bussiness'
 
 export const useSessionStore = defineStore('session', () => {
 	// State
 
-	const user = ref<User | null>(null)
+	const defaultEmail = ref<string>(localStorage.getItem('email') || '')
+	const defaultPassword = ref<string>(localStorage.getItem('password') || '')
+	const token = ref<string>(localStorage.getItem('token') || '')
+
+	const user = ref<UserDetails | null>(null)
 
 	// Getter
 
 	// Action
+
+	function setDefaultEmail(email: string): void {
+		localStorage.setItem('email', email)
+		defaultEmail.value = email
+	}
+
+	function setDefaultPassword(password: string): void {
+		localStorage.setItem('password', password)
+		defaultPassword.value = password
+	}
+
+	function setToken(_token: string): void {
+		localStorage.setItem('token', _token)
+		token.value = _token
+	}
 
 	async function register(name: string, email: string, password: string) {
 		try {
@@ -33,18 +48,21 @@ export const useSessionStore = defineStore('session', () => {
 			)
 
 			user.value = reponse.items.user
-			localStorage.setItem('email', email)
-			localStorage.setItem('password', password)
-			localStorage.setItem('token', reponse.items.token)
+			setDefaultEmail(email)
+			setDefaultPassword(password)
+			setToken(reponse.items.token)
 		} catch (e) {
-			localStorage.setItem('password', '')
-			localStorage.setItem('token', '')
+			setDefaultPassword('')
+			setToken('')
 			user.value = null
 			throw e
 		}
 	}
 
-	async function login(email = defaultEmail, password = defaultPassword) {
+	async function login(
+		email = defaultEmail.value,
+		password = defaultPassword.value
+	) {
 		try {
 			const reponse = await api<ApiLoginReponse>(
 				'/user/login',
@@ -59,12 +77,12 @@ export const useSessionStore = defineStore('session', () => {
 			)
 
 			user.value = reponse.items.user
-			localStorage.setItem('email', email)
-			localStorage.setItem('password', password)
-			localStorage.setItem('token', reponse.items.token)
+			setDefaultEmail(email)
+			setDefaultPassword(password)
+			setToken(reponse.items.token)
 		} catch (e) {
-			localStorage.setItem('password', '')
-			localStorage.setItem('token', '')
+			setDefaultPassword('')
+			setToken('')
 			user.value = null
 			throw e
 		}
@@ -73,7 +91,6 @@ export const useSessionStore = defineStore('session', () => {
 	async function logout() {
 		localStorage.setItem('password', '')
 		localStorage.setItem('token', '')
-		window.location.reload()
 	}
 
 	return {

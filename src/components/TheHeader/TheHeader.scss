@@ -1,0 +1,75 @@
+$color: rgb(0, 212, 96);
+
+.container {
+
+    .page-links>li a,
+    .app-logo-div,
+    .tool-page-links {
+        padding-block: 10px;
+    }
+
+    .page-links li a {
+        display: flex;
+        height: 100%;
+        align-items: center;
+        border-bottom: 5px solid #0000;
+
+
+        transition: background-color 200ms;
+
+        &.active {
+            border-color: $color;
+        }
+
+        &:hover {
+            cursor: pointer;
+            background-color: $color;
+        }
+    }
+
+    .dropdown li>*:hover {
+        cursor: pointer;
+    }
+
+    .user-info {
+
+        .username {
+            text-align: center;
+            font-size: x-large;
+            overflow: hidden;
+            width: 150px;
+        }
+
+        .money-div {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+
+            span {
+                margin-left: 5px;
+                font-size: large;
+                font-weight: lighter;
+            }
+
+            img {
+                margin-inline: 5px;
+            }
+        }
+
+        .xp-div {
+            display: flex;
+            align-items: center;
+
+            .progress {
+                height: 10px;
+                width: 110px;
+            }
+
+            img {
+                margin-left: 2.5px;
+            }
+        }
+    }
+
+
+}
