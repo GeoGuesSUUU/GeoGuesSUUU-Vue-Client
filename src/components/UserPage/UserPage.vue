@@ -11,13 +11,11 @@ const router = useRouter()
 const { currentUser } = toRefs(geoStore)
 
 const user = ref<UserApp | null>(null)
-console.log('Init', user.value)
 
 onMounted(async () => {
 	const userId = +router.currentRoute.value.params.id
 	if (userId !== currentUser.value.id) {
 		user.value = await UserService.getUserById(userId)
-		console.log(user.value)
 	} else {
 		user.value = currentUser.value
 	}

@@ -2,6 +2,7 @@ export interface User {
 	id: number
 	name: string
 	email: string
+	img?: string
 	coins?: number
 	xp: number
 	level: number
@@ -12,13 +13,26 @@ export interface User {
 	isVerified: boolean
 }
 
+export interface Effect {
+	type: string
+	value: number
+}
+
 export interface Country {
-	id: 0
+	id: number
 	name: string
 	code: string
 	flag: string
 	continent: string
-	initLife: 0
+	initLife: number
+	life: number
+	lifeMax: number
+	shield: number
+	shieldMax: number
+	initPrice: number
+	claimDate: Date
+	effects: Effect[]
+	price: number
 	countryItems?: []
 	user?: User
 	ownedAt: Date
@@ -46,4 +60,14 @@ export interface UserDetails extends User {
 
 export interface UserApp extends UserDetails {
 	levelProgress: number
+}
+
+export interface CountryApp extends Country {
+	lifePercentage: number
+	shieldPercentage: number
+}
+
+export interface ClaimRewards {
+	coins: number
+	items: ItemSlot[]
 }
