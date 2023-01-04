@@ -11,6 +11,15 @@
 .progress-heal {
     background: linear-gradient(-45deg, #a7f32e, #40e20e, #15e241, #10e6b8);
     background-size: 400% 100%;
+
+    &.ownerless {
+        background: linear-gradient(-45deg, #abff0f, #eaee0f, #dfd006, #ddbc00);
+        background-size: 400% 100%;
+    }
+}
+
+.criticalLifeBar {
+    animation: critical-life-shadow 3s ease infinite;
 }
 
 .progress-shield {
@@ -27,6 +36,18 @@
 	}
 	100% {
 		background-position: 0% 50%;
+	}
+}
+
+@keyframes critical-life-shadow {
+	0% {
+		box-shadow: 0px 0px 10px rgb(209, 0, 0);
+	}
+	50% {
+		box-shadow: 0px 0px 30px rgb(209, 0, 0);
+	}
+	100% {
+		box-shadow: 0px 0px 10px rgb(209, 0, 0);
 	}
 }
 

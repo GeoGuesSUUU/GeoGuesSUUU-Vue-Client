@@ -63,16 +63,20 @@ function updateMap(): void {
 		country.setAttribute('href', '#offcanvasExample')
 		country.setAttribute('role', 'button')
 		country.setAttribute('aria-controls', 'offcanvasExample')
+		const color = country.getAttribute('fill')
+		if (color?.endsWith('0') || color?.endsWith('1')) {
+			country.classList.add('critical-life')
+		}
 	}
 }
 
 function getColor(country: Country) {
-	let start = '#FF0'
 	if (country.user) {
-		start = country.user.id === currentUser.value.id ? '#0F0' : '#F00'
+		const start = country.user.id === currentUser.value.id ? '#0F0' : '#F00'
+		const end = Math.round((country.life * 15) / country.lifeMax).toString(16)
+		return start + end
 	}
-	const end = Math.round((country.life * 15) / country.lifeMax).toString(16)
-	return start + end
+	return '#FF0F'
 }
 
 function formatData(countries: Country[]): Record<string, object> {
