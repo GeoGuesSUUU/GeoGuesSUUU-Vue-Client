@@ -77,9 +77,15 @@ function getLevelLabelByXP(user: UserApp) {
 					</div>
 				</div>
 				<div v-if="currentUser.id === user?.id" class="inventory">
-					<h1 class="mt-3">Inventory</h1>
+					<h1 class="mt-3">
+						Inventory
+						<span v-if="user?.userItems" class="fs-4 badge bg-secondary">
+							{{ user?.userItems.length }}
+						</span>
+					</h1>
 					<hr class="hr" />
-					<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4">
+					<div
+						class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4">
 						<div
 							v-for="item of user?.userItems"
 							:key="item.itemType.id"
