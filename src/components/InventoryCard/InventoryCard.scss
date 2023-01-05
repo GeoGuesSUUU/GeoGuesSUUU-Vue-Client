@@ -1,0 +1,59 @@
+.card {
+    --inventory-card-color: var(--rarety-common);
+    --shadow-card-rgb: var(--rarety-common-lighter-rgb);
+    max-width: 300px;
+    overflow-x: hidden;
+    border-color: var(--inventory-card-color);
+    border-width: medium;
+    transition: all 0.25s;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    .card-header {
+        color: var(--inventory-card-color);
+        font-weight: bold;
+
+        .bi-star-fill {
+            color: var(--inventory-card-color);
+            float: right;
+        }
+    }
+
+    img {
+        width: 200px;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    .card-body {
+        flex: initial;
+        overflow-y: auto;
+        height: 200px;
+
+        &::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: #0000;
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: var(--inventory-card-color);
+        }
+
+        .badge {
+            background-color: var(--inventory-card-color);
+        }
+    }
+
+
+
+    &.selectedItem {
+        box-shadow:
+            0px 16px 17px rgba(var(--shadow-card-rgb), 0.31);
+        transform: scale(1.02);
+    }
+}
