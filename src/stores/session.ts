@@ -10,6 +10,12 @@ export const useSessionStore = defineStore('session', () => {
 	const defaultEmail = ref<string>(localStorage.getItem('email') || '')
 	const defaultPassword = ref<string>(localStorage.getItem('password') || '')
 	const token = ref<string>(localStorage.getItem('token') || '')
+	const isDarkMode = ref<boolean>(
+		localStorage.getItem('darkmode') === 'true' || false
+	)
+	document
+		.getElementsByTagName('html')[0]
+		?.setAttribute('data-bs-theme', isDarkMode.value ? 'dark' : 'light')
 
 	const user = ref<UserDetails | null>(null)
 
@@ -30,6 +36,11 @@ export const useSessionStore = defineStore('session', () => {
 	function setToken(_token: string): void {
 		localStorage.setItem('token', _token)
 		token.value = _token
+	}
+
+	function setDarkMode(_darkmodeState: boolean): void {
+		localStorage.setItem('darkmode', _darkmodeState ? 'true' : 'false')
+		isDarkMode.value = _darkmodeState
 	}
 
 	async function register(name: string, email: string, password: string) {
@@ -101,5 +112,7 @@ export const useSessionStore = defineStore('session', () => {
 		register,
 		login,
 		logout,
+		isDarkMode,
+		setDarkMode,
 	}
 })

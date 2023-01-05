@@ -41,7 +41,7 @@ function getLevelLabel() {
 					<li>
 						<router-link
 							:to="{ name: 'home' }"
-							class="nav-link px-2 link-dark"
+							class="h-link nav-link px-2"
 							:class="{ active: $route.name === 'home' }">
 							Home
 						</router-link>
@@ -49,7 +49,7 @@ function getLevelLabel() {
 					<li>
 						<router-link
 							:to="{ name: 'games' }"
-							class="nav-link px-2 link-dark"
+							class="h-link nav-link px-2"
 							:class="{ active: $route.name === 'games' }">
 							Games
 						</router-link>
@@ -57,7 +57,7 @@ function getLevelLabel() {
 					<li>
 						<router-link
 							:to="{ name: 'store' }"
-							class="nav-link px-2 link-dark"
+							class="h-link nav-link px-2"
 							:class="{ active: $route.name === 'store' }">
 							Store
 						</router-link>
