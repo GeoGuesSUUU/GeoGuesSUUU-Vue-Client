@@ -181,9 +181,15 @@ eventEmitter.on('@UpCountry', () => {
 				<button
 					type="button"
 					title="Reload map data"
-					class="btn btn-outline-secondary"
+					class="btn-reload btn btn-outline-secondary position-relative"
 					:disabled="disabledReloadButton"
 					@click="getCountriesData()">
+					<div
+						v-if="disabledReloadButton"
+						class="spinner-grow text-secondary position-absolute"
+						role="status">
+						<span class="visually-hidden">Loading...</span>
+					</div>
 					<i class="bi bi-arrow-clockwise"></i>
 				</button>
 				<button
