@@ -5,7 +5,9 @@ import type {
 	Country,
 	UserApp,
 	ItemSlot,
+	Item,
 } from '@/client/types/bussiness'
+import { SERVER_DOMAIN } from '@/constants'
 import { useSessionStore } from '@/stores/session'
 
 export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
@@ -129,6 +131,16 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 		}
 	}
 
+	function getItemImage(item: Item): string {
+		if (item.img) {
+			if (item.img.startsWith('/assets/img/')) {
+				return SERVER_DOMAIN + item.img
+			}
+			return item.img
+		}
+		return '/src/assets/item_default.svg'
+	}
+
 	return {
 		currentUser,
 		countries,
@@ -140,5 +152,6 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 		removeItemInInventory,
 		updateLifeAndShield,
 		updateAfterAttack,
+		getItemImage,
 	}
 })

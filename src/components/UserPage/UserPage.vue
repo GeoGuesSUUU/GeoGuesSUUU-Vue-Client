@@ -9,6 +9,7 @@ const geoStore = useGeoguessuuuStore()
 const router = useRouter()
 
 const { currentUser } = toRefs(geoStore)
+const { getItemImage } = geoStore
 
 const user = ref<UserApp | null>(null)
 
@@ -84,15 +85,24 @@ function getLevelLabelByXP(user: UserApp) {
 							:key="item.itemType.id"
 							class="col d-flex justify-content-center">
 							<div
-								class="card h-100"
+								class="card h-100 w-100"
 								:style="`--inventory-card-color: var(--rarety-${item.itemType.rarity.toLocaleLowerCase()})`">
 								<div class="card-header">
 									{{ item.itemType.rarity.toLocaleUpperCase() }}
 								</div>
-								<img
-									src="/src/assets/item-default-img.jpg"
-									class="card-img-top"
-									alt="item image" />
+								<div class="p-2 d-flex justify-content-center">
+									<img
+										:src="getItemImage(item.itemType)"
+										:class="
+											!item.itemType.img ||
+											item.itemType.img.startsWith('/assets/img/')
+												? 'p-5'
+												: ''
+										"
+										class="card-img-top"
+										alt="item image" />
+								</div>
+
 								<div class="card-body">
 									<h5 class="card-title">
 										{{ item.itemType.name }}

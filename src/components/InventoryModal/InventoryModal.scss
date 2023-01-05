@@ -1,6 +1,7 @@
 .inventory {
     .card {
         --inventory-card-color: var(--rarety-common);
+        --shadow-card-rgb: var(--rarety-common-lighter-rgb);
         max-width: 300px;
         overflow-x: hidden;
         border-color: var(--inventory-card-color);
@@ -28,7 +29,7 @@
 
         &.selectedItem {
             box-shadow:
-                0px 16px 17px rgba(0, 221, 99, 0.31);
+                0px 16px 17px rgba(var(--shadow-card-rgb), 0.31);
                 transform: scale(1.02);
         }
     }
