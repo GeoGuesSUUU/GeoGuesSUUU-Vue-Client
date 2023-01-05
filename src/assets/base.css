@@ -34,10 +34,25 @@
 
   /*Rarety*/
   --rarety-common: #6c757d;
+  --rarety-common-lighter: #AFAFAF;
+  --rarety-common-rgb: 108,117,125;
+  --rarety-common-lighter-rgb: 175,175,175;
   --rarety-uncommon: #00c400;
-  --rarety-rare: rgb(0, 112, 216);
-  --rarety-epic: rgb(125, 0, 197);
-  --rarety-legendary: rgb(224, 120, 0);
+  --rarety-uncommon-lighter: #43E324;
+  --rarety-uncommon-rgb: 0,196,0;
+  --rarety-uncommon-lighter-rgb: 67,227,36;
+  --rarety-rare: #0070D8;
+  --rarety-rare-lighter: #238EDF;
+  --rarety-rare-rgb: 0,112,216;
+  --rarety-rare-lighter-rgb: 35,142,223;
+  --rarety-epic: #7D00C5;
+  --rarety-epic-lighter: #AF23DF;
+  --rarety-epic-rgb: 125,0,197;
+  --rarety-epic-lighter-rgb: 175,35,223;
+  --rarety-legendary: #E07800;
+  --rarety-legendary-lighter: #FF9E00;
+  --rarety-legendary-rgb: 224,120,0;
+  --rarety-legendary-lighter-rgb: 255,158,0;
 }
 
 @media (prefers-color-scheme: dark) {

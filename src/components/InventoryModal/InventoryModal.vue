@@ -13,8 +13,12 @@ import type { CountryApp, ItemSlot } from '../../client/types/bussiness'
 const geoStore = useGeoguessuuuStore()
 
 const { currentUser, countries } = toRefs(geoStore)
-const { removeItemInInventory, updateLifeAndShield, updateAfterAttack } =
-	geoStore
+const {
+	removeItemInInventory,
+	updateLifeAndShield,
+	updateAfterAttack,
+	getItemImage,
+} = geoStore
 const selectValue = ref('all')
 const action = ref<string | null>(null)
 const target = ref<CountryApp | null>(null)
@@ -150,14 +154,22 @@ eventEmitter.on(
 								:class="{
 									selectedItem: item.itemType.id === selectedItem?.itemType.id,
 								}"
-								:style="`--inventory-card-color: var(--rarety-${item.itemType.rarity.toLocaleLowerCase()})`">
+								:style="`--inventory-card-color: var(--rarety-${item.itemType.rarity.toLocaleLowerCase()}); --shadow-card-rgb: var(--rarety-${item.itemType.rarity.toLocaleLowerCase()}-lighter-rgb);`">
 								<div class="card-header">
 									{{ item.itemType.rarity.toLocaleUpperCase() }}
 								</div>
-								<img
-									src="/src/assets/item-default-img.jpg"
-									class="card-img-top"
-									alt="item image" />
+								<div class="p-2 d-flex justify-content-center">
+									<img
+										:src="getItemImage(item.itemType)"
+										:class="
+											!item.itemType.img ||
+											item.itemType.img.startsWith('/assets/img/')
+												? 'p-5'
+												: ''
+										"
+										class="card-img-top"
+										alt="item image" />
+								</div>
 								<div class="card-body">
 									<h5 class="card-title">
 										{{ item.itemType.name }}

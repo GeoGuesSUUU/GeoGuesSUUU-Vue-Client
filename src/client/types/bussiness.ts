@@ -45,6 +45,8 @@ export interface Item {
 	type: string
 	rarity: string
 	fantastic: true
+	img?: string
+	effects: Effect[]
 }
 
 export interface ItemSlot {
