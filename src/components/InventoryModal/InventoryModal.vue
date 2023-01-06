@@ -9,16 +9,13 @@ import {
 import { NotifyService, NotifyType } from '@/client/services/notify-service'
 import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
 import type { CountryApp, ItemSlot } from '../../client/types/bussiness'
+import InventoryCard from '../InventoryCard/InventoryCard.vue'
 
 const geoStore = useGeoguessuuuStore()
 
 const { currentUser, countries } = toRefs(geoStore)
-const {
-	removeItemInInventory,
-	updateLifeAndShield,
-	updateAfterAttack,
-	getItemImage,
-} = geoStore
+const { removeItemInInventory, updateLifeAndShield, updateAfterAttack } =
+	geoStore
 const selectValue = ref('all')
 const action = ref<string | null>(null)
 const target = ref<CountryApp | null>(null)
@@ -143,45 +140,18 @@ eventEmitter.on(
 						<option value="equipment">Equipment</option>
 					</select>
 					<hr class="hr" />
-					<div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4 inventory">
+					<div
+						class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 row-cols-xxl-5 g-4 inventory">
 						<div
 							v-for="item of items"
 							:key="item.itemType.id"
 							@click="setSelectedItem(item)"
 							class="col d-flex justify-content-center">
-							<div
-								class="card h-100"
+							<InventoryCard
+								:item="item"
 								:class="{
 									selectedItem: item.itemType.id === selectedItem?.itemType.id,
-								}"
-								:style="`--inventory-card-color: var(--rarety-${item.itemType.rarity.toLocaleLowerCase()}); --shadow-card-rgb: var(--rarety-${item.itemType.rarity.toLocaleLowerCase()}-lighter-rgb);`">
-								<div class="card-header">
-									{{ item.itemType.rarity.toLocaleUpperCase() }}
-								</div>
-								<div class="p-2 d-flex justify-content-center">
-									<img
-										:src="getItemImage(item.itemType)"
-										:class="
-											!item.itemType.img ||
-											item.itemType.img.startsWith('/assets/img/')
-												? 'p-5'
-												: ''
-										"
-										class="card-img-top"
-										alt="item image" />
-								</div>
-								<div class="card-body">
-									<h5 class="card-title">
-										{{ item.itemType.name }}
-										<span v-if="!item.itemType.fantastic" class="badge">
-											x{{ item.quantity }}
-										</span>
-									</h5>
-									<p class="card-text">
-										{{ item.itemType.description }}
-									</p>
-								</div>
-							</div>
+								}"></InventoryCard>
 						</div>
 					</div>
 				</div>

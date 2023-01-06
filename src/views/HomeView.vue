@@ -4,8 +4,8 @@ import TheHeaderVue from '@/components/TheHeader/TheHeader.vue'
 </script>
 
 <template>
+	<TheHeaderVue></TheHeaderVue>
 	<main>
-		<TheHeaderVue></TheHeaderVue>
 		<RouterView />
 	</main>
 </template>

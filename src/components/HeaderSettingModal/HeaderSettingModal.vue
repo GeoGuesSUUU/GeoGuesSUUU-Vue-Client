@@ -1,4 +1,25 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { toRefs } from 'vue'
+import { useSessionStore } from '@/stores/session'
+
+const sessionStore = useSessionStore()
+
+const { isDarkMode } = toRefs(sessionStore)
+const { setDarkMode } = sessionStore
+
+function toggleDarkMode() {
+	if (isDarkMode.value) {
+		document
+			.getElementsByTagName('html')[0]
+			?.setAttribute('data-bs-theme', 'light')
+	} else {
+		document
+			.getElementsByTagName('html')[0]
+			?.setAttribute('data-bs-theme', 'dark')
+	}
+	setDarkMode(!isDarkMode.value)
+}
+</script>
 
 <template>
 	<div
@@ -18,22 +39,19 @@
 						aria-label="Close"></button>
 				</div>
 				<div class="modal-body">
-					...
-					<h2>Ideas :</h2>
-					<ul>
-						<li>Darkmode</li>
-						<li>Map color</li>
-						<li>User locale</li>
-					</ul>
-				</div>
-				<div class="modal-footer">
-					<button
-						type="button"
-						class="btn btn-secondary"
-						data-bs-dismiss="modal">
-						Close
-					</button>
-					<button type="button" class="btn btn-primary">Save changes</button>
+					<h4>DarkMode :</h4>
+					<div class="d-flex align-items-center">
+						<i class="bi bi-sun-fill px-2 fs-5"></i>
+						<div class="form-check form-switch">
+							<input
+								class="form-check-input"
+								type="checkbox"
+								role="switch"
+								id="flexSwitchCheckDefault"
+								@click="toggleDarkMode()" />
+						</div>
+						<i class="bi bi-moon-stars-fill px-1 fs-5"></i>
+					</div>
 				</div>
 			</div>
 		</div>

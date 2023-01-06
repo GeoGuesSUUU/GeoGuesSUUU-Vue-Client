@@ -6,3 +6,12 @@
     border: 3px solid #ccc;
 }
 
+.btn-reload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .spinner-grow {
+        transform: scale(2);
+    }
+}

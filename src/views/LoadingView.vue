@@ -27,7 +27,7 @@ if (!user) loadUser()
 </script>
 
 <template>
-	<main>
+	<main class="overflow-hidden">
 		<TheLoadingVue></TheLoadingVue>
 	</main>
 </template>

@@ -1,5 +1,13 @@
 $color: rgb(0, 212, 96);
 
+html[data-bs-theme="dark"] .h-link {
+    color: white;
+}
+
+html[data-bs-theme="light"] .h-link {
+    color: black;
+}
+
 .header-components {
     position: relative;
 

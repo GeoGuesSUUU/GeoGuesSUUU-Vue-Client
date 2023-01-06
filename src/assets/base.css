@@ -111,3 +111,24 @@
       fill: #0F0F;
   }
 }
+
+*::-webkit-scrollbar {
+  width: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #0000;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: #6c757d;
+}
+
+main {
+  height: calc(100vh - 75px);
+  overflow-y: auto;
+}
+
+html[data-bs-theme="dark"] div.svgMap-map-wrapper {
+  background: #134474 !important;
+}
