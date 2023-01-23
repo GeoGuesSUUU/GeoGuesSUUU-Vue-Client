@@ -61,6 +61,7 @@ export interface UserDetails extends User {
 }
 
 export interface UserApp extends UserDetails {
+	isAdmin: boolean
 	levelProgress: number
 }
 

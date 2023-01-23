@@ -19,12 +19,6 @@ const router = createRouter({
 			component: LoadingView,
 		},
 		{
-			path: '/',
-			redirect: (_to) => {
-				return { name: 'loading' }
-			},
-		},
-		{
 			path: '/games',
 			redirect: (_to) => {
 				return { name: 'loading', query: { name: 'games' } }
@@ -37,12 +31,24 @@ const router = createRouter({
 			},
 		},
 		{
+			path: '/chat',
+			redirect: (_to) => {
+				return { name: 'loading', query: { name: 'chat' } }
+			},
+		},
+		{
 			path: '/user/:id(\\d+)',
 			redirect: (_to) => {
 				return {
 					name: 'loading',
 					query: { name: 'user', params: JSON.stringify(_to.params) },
 				}
+			},
+		},
+		{
+			path: '/',
+			redirect: (_to) => {
+				return { name: 'loading' }
 			},
 		},
 		{
@@ -70,6 +76,11 @@ const router = createRouter({
 					path: '/user/:id(\\d+)',
 					name: 'user',
 					component: () => import('../components/UserPage/UserPage.vue'),
+				},
+				{
+					path: '/chat',
+					name: 'chat',
+					component: () => import('../views/ChatView.vue'),
 				},
 			],
 		},
