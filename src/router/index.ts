@@ -46,6 +46,15 @@ const router = createRouter({
 			},
 		},
 		{
+			path: '/game-page/:id(\\d+)',
+			redirect: (_to) => {
+				return {
+					name: 'loading',
+					query: { name: 'game-page', params: JSON.stringify(_to.params) },
+				}
+			},
+		},
+		{
 			path: '/home',
 			name: 'app',
 			component: HomeView,
@@ -70,6 +79,12 @@ const router = createRouter({
 					path: '/user/:id(\\d+)',
 					name: 'user',
 					component: () => import('../components/UserPage/UserPage.vue'),
+				},
+				{
+					path: '/game-page/:id(\\d+)',
+					name: 'game-page',
+					component: () =>
+						import('../components/CallGamePage/CallGamePage.vue'),
 				},
 			],
 		},

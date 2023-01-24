@@ -60,6 +60,23 @@ export interface UserDetails extends User {
 	countries: Country[]
 }
 
+export interface Level {
+	id: number
+	difficulty: number
+	label: string
+	description: string
+}
+
+export interface Game {
+	id: number
+	title: string
+	description: string
+	img: string
+	tags: string
+	server: string
+	levels: Level[]
+}
+
 export interface UserApp extends UserDetails {
 	levelProgress: number
 }
