@@ -62,6 +62,19 @@ function getLevelLabel() {
 							Store
 						</router-link>
 					</li>
+					<div class="btn-group mx-2" role="group">
+						<router-link
+							:to="{ name: 'chat' }"
+							target="_blank"
+							class="btn btn-secondary px-2 my-2 d-flex justify-content-center align-content-center">
+							<i class="bi bi-box-arrow-up-left me-2"></i>
+						</router-link>
+						<router-link
+							:to="{ name: 'chat' }"
+							class="btn btn-secondary px-2 my-2 d-flex justify-content-center align-content-center">
+							Chat
+						</router-link>
+					</div>
 				</ul>
 				<div class="app-logo-div">
 					<router-link

@@ -1,0 +1,23 @@
+#chat {
+    height: 60vh;
+    border: solid lightgrey 1px;
+    overflow: auto;
+    margin-bottom: 20px;
+}
+.online-post {
+    background: #00bb1f;
+}
+.reloading-icon {
+    color: red;
+}
+.bi-arrow-clockwise {
+    animation: reload 2s ease infinite;
+}
+@keyframes reload {
+    from {
+        transform: rotateZ(0deg);
+    }
+    to {
+        transform: rotateZ(360deg);
+    }
+}

@@ -24,6 +24,7 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 	const currentUser = computed((): UserApp => {
 		return <UserApp>{
 			...userRef.value,
+			isAdmin: userRef.value?.roles.includes('ROLE_ADMIN'),
 			levelProgress: (() => {
 				if (!userRef.value) return 0
 				const min = userRef.value.levelXpMin
