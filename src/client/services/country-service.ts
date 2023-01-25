@@ -17,7 +17,6 @@ export class CountryService {
 	}
 
 	static async buy(country: CountryApp, user: UserApp): Promise<Country> {
-		console.log(country)
 		if (country.user) {
 			if (country.user.id === user.id) {
 				throw new Error('You already own this country')
