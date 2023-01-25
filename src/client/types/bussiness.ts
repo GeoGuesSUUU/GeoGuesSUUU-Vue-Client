@@ -78,6 +78,7 @@ export interface Game {
 }
 
 export interface UserApp extends UserDetails {
+	isAdmin: boolean
 	levelProgress: number
 }
 
