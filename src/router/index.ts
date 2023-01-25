@@ -46,6 +46,15 @@ const router = createRouter({
 			},
 		},
 		{
+			path: '/game-page/:id(\\d+)',
+			redirect: (_to) => {
+				return {
+					name: 'loading',
+					query: { name: 'game-page', params: JSON.stringify(_to.params) },
+				}
+			},
+		},
+		{
 			path: '/',
 			redirect: (_to) => {
 				return { name: 'loading' }
@@ -73,14 +82,20 @@ const router = createRouter({
 					component: () => import('../components/StorePage/StorePage.vue'),
 				},
 				{
+					path: '/chat',
+					name: 'chat',
+					component: () => import('../components/TheChat/TheChat.vue'),
+				},
+				{
 					path: '/user/:id(\\d+)',
 					name: 'user',
 					component: () => import('../components/UserPage/UserPage.vue'),
 				},
 				{
-					path: '/chat',
-					name: 'chat',
-					component: () => import('../components/TheChat/TheChat.vue'),
+					path: '/game-page/:id(\\d+)',
+					name: 'game-page',
+					component: () =>
+						import('../components/CallGamePage/CallGamePage.vue'),
 				},
 			],
 		},
