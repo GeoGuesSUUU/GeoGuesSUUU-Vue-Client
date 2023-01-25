@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { GameService } from '@/client/services/game-service'
 
@@ -19,6 +19,12 @@ function reloadScripts(gamePage: HTMLElement): void {
 	})
 }
 
+function deleteScripts(gamePage: HTMLElement): void {
+	const scripts = gamePage.querySelectorAll('script')
+	console.log(scripts)
+	scripts.forEach((script) => script.remove())
+}
+
 onMounted(async () => {
 	const gameId = +router.currentRoute.value.params.id
 	const game = await GameService.getGameByID(gameId)
@@ -30,6 +36,12 @@ onMounted(async () => {
 	if (gamePage) {
 		gamePage.innerHTML = pageContent.value
 		setTimeout(() => reloadScripts(gamePage), 1000)
+	}
+})
+onUnmounted(() => {
+	const gamePage = document.getElementById('game-page-content')
+	if (gamePage) {
+		deleteScripts(gamePage)
 	}
 })
 </script>
