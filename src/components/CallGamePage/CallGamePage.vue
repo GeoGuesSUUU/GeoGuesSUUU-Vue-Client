@@ -6,23 +6,19 @@ import { GameService } from '@/client/services/game-service'
 const router = useRouter()
 const pageContent = ref<string | null>(null)
 
+const scriptElements: HTMLScriptElement[] = []
+
 function reloadScripts(gamePage: HTMLElement): void {
 	const scripts = gamePage.querySelectorAll('script')
-	console.log(scripts)
 	scripts.forEach((script) => {
 		script.remove()
 		const newScript = document.createElement('script')
 		const att = script.getAttribute('src')
 		if (att) newScript.setAttribute('src', att)
 		newScript.innerHTML = script.innerHTML
+		scriptElements.push(newScript)
 		gamePage.appendChild(newScript)
 	})
-}
-
-function deleteScripts(gamePage: HTMLElement): void {
-	const scripts = gamePage.querySelectorAll('script')
-	console.log(scripts)
-	scripts.forEach((script) => script.remove())
 }
 
 onMounted(async () => {
@@ -39,10 +35,7 @@ onMounted(async () => {
 	}
 })
 onUnmounted(() => {
-	const gamePage = document.getElementById('game-page-content')
-	if (gamePage) {
-		deleteScripts(gamePage)
-	}
+	scriptElements.forEach((script) => script.remove())
 })
 </script>
 
