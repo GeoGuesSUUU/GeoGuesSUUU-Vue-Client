@@ -6,6 +6,7 @@ import type {
 	UserApp,
 	ItemSlot,
 	Item,
+	ItemStore,
 } from '@/client/types/bussiness'
 import { SERVER_DOMAIN } from '@/constants'
 import { useSessionStore } from '@/stores/session'
@@ -18,6 +19,7 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 	// State
 
 	const countriesRef = ref<Country[]>([])
+	const itemStoreRef = ref<ItemStore[]>([])
 
 	// Getters
 
@@ -46,6 +48,8 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 		})
 	})
 
+	const itemsStore = computed(() => itemStoreRef.value)
+
 	const authUserLevelProgress = computed(() => {
 		if (!userRef.value) return 0
 		return Math.round((userRef.value.xp * 100) / userRef.value.levelXpMax)
@@ -64,6 +68,10 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 
 	function upsetCountries(_countries: Country[]): void {
 		countriesRef.value = _countries
+	}
+
+	function upsetItemsStore(_items: ItemStore[]): void {
+		itemStoreRef.value = _items
 	}
 
 	function addItemsInInventory(items: ItemSlot[]) {
@@ -144,9 +152,11 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 	return {
 		currentUser,
 		countries,
+		itemsStore,
 		authUserLevelProgress,
 		upsetCountries,
 		upsetCountry,
+		upsetItemsStore,
 		addItemsInInventory,
 		updateClaimDate,
 		removeItemInInventory,

@@ -46,12 +46,22 @@ export interface Item {
 	rarity: string
 	fantastic: true
 	img?: string
+	price: number
 	effects: Effect[]
 }
 
 export interface ItemSlot {
 	quantity: number
 	itemType: Item
+}
+
+export interface ItemStore {
+	id: number
+	item: Item
+	type: string
+	trending: boolean
+	promotion: number
+	promoPrice: number
 }
 
 export interface UserDetails extends User {
