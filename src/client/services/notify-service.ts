@@ -1,4 +1,4 @@
-import { createToast } from 'mosha-vue-toastify'
+import { createToast, type Position } from 'mosha-vue-toastify'
 
 export enum NotifyType {
 	DEFAULT = 'default',
@@ -14,7 +14,8 @@ export class NotifyService {
 		type: NotifyType = NotifyType.DEFAULT
 	): Promise<void> {
 		createToast(message, {
-			position: 'bottom-right',
+			position: (localStorage.getItem('notif-position') ??
+				'bottom-right') as Position,
 			type: type,
 			transition: 'bounce',
 			showIcon: true,

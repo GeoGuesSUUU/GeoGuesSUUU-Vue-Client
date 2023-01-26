@@ -13,6 +13,9 @@ export const useSessionStore = defineStore('session', () => {
 	const isDarkMode = ref<boolean>(
 		localStorage.getItem('darkmode') === 'true' || false
 	)
+	const notifPosition = ref<string>(
+		localStorage.getItem('notif-position') ?? 'bottom-right'
+	)
 	document
 		.getElementsByTagName('html')[0]
 		?.setAttribute('data-bs-theme', isDarkMode.value ? 'dark' : 'light')
@@ -41,6 +44,11 @@ export const useSessionStore = defineStore('session', () => {
 	function setDarkMode(_darkmodeState: boolean): void {
 		localStorage.setItem('darkmode', _darkmodeState ? 'true' : 'false')
 		isDarkMode.value = _darkmodeState
+	}
+
+	function changeNotifPosition(_notifPosition: string): void {
+		localStorage.setItem('notif-position', _notifPosition)
+		notifPosition.value = _notifPosition
 	}
 
 	async function register(name: string, email: string, password: string) {
@@ -114,5 +122,7 @@ export const useSessionStore = defineStore('session', () => {
 		logout,
 		isDarkMode,
 		setDarkMode,
+		notifPosition,
+		changeNotifPosition,
 	}
 })
