@@ -26,6 +26,7 @@ function getLevelLabelByXP(user: UserApp) {
 	const min = user.levelXpMin
 	const xp = user.xp
 	const max = user.levelXpMax
+	console.log(user)
 	return `${xp - min} / ${max - min} (${user.levelProgress}%)`
 }
 </script>
@@ -35,7 +36,7 @@ function getLevelLabelByXP(user: UserApp) {
 		<div class="card-body">
 			<div v-if="user" class="user-info">
 				<img
-					src="/src/assets/default_user.svg"
+					:src="user.img ?? '/src/assets/default_user.svg'"
 					alt="user icon"
 					class="user-pic" />
 				<div class="user-info-stat">
@@ -45,6 +46,10 @@ function getLevelLabelByXP(user: UserApp) {
 							v-if="user?.isVerified"
 							title="Verified User"
 							class="bi bi-patch-check-fill"></i>
+						<i
+							v-if="user?.isAdmin"
+							title="Admin"
+							class="bi bi-globe-americas ps-2 text-secondary"></i>
 					</h2>
 					<div class="xp-div d-flex flex-row">
 						<img src="/src/assets/xp.svg" alt="user xp" width="40" />

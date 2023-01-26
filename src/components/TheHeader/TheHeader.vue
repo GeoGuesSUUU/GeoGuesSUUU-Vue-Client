@@ -102,7 +102,7 @@ function getLevelLabel() {
 							data-bs-toggle="dropdown"
 							aria-expanded="false">
 							<img
-								src="/src/assets/default_user.svg"
+								:src="currentUser.img ?? '/src/assets/default_user.svg'"
 								alt="user image"
 								width="32"
 								height="32"
