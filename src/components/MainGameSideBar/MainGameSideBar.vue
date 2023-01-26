@@ -8,19 +8,20 @@ import {
 	computed,
 } from 'vue'
 import { RouterLink } from 'vue-router'
+import { CountryService } from '@/client/services/country-service'
 import {
 	callModalInventoryEmit,
 	updateCountryEmit,
 } from '@/client/services/event-service'
+import { NotifyService, NotifyType } from '@/client/services/notify-service'
+import type { CountryApp } from '@/client/types/bussiness'
 import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
-import { CountryService } from '../../client/services/country-service'
-import { NotifyService, NotifyType } from '../../client/services/notify-service'
-import type { CountryApp } from '../../client/types/bussiness'
 
 const geoStore = useGeoguessuuuStore()
 
 const { currentUser } = toRefs(geoStore)
-const { upsetCountry, addItemsInInventory, updateClaimDate } = geoStore
+const { upsetCountry, addItemsInInventory, updateClaimDate, withdrawCoins } =
+	geoStore
 
 const ps = defineProps<{
 	country: CountryApp
@@ -55,10 +56,7 @@ async function buyCountry() {
 			props.value.country,
 			currentUser.value
 		)
-		if (currentUser.value.coins) {
-			currentUser.value.coins -= props.value.country.price
-		}
-		// props.value.country = Object.assign(props.value.country, country)
+		withdrawCoins(props.value.country.price)
 		upsetCountry(country)
 		updateCountryEmit(country)
 		emit('update-map')
