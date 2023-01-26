@@ -125,7 +125,7 @@
 }
 
 body > #app > main {
-  height: calc(100vh - 75px);
+  height: calc(100vh - 59px);
   overflow-y: auto;
 }
 

@@ -1,11 +1,13 @@
 <script setup lang="ts">
-import { toRefs } from 'vue'
+import { ref, toRefs } from 'vue'
 import { useSessionStore } from '@/stores/session'
 
 const sessionStore = useSessionStore()
 
 const { isDarkMode } = toRefs(sessionStore)
 const { setDarkMode } = sessionStore
+
+const inputDarkMode = ref(isDarkMode)
 
 function toggleDarkMode() {
 	if (isDarkMode.value) {
@@ -48,6 +50,7 @@ function toggleDarkMode() {
 								type="checkbox"
 								role="switch"
 								id="flexSwitchCheckDefault"
+								v-model="inputDarkMode"
 								@click="toggleDarkMode()" />
 						</div>
 						<i class="bi bi-moon-stars-fill px-1 fs-5"></i>

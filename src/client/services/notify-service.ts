@@ -17,6 +17,7 @@ export class NotifyService {
 			position: 'bottom-right',
 			type: type,
 			transition: 'bounce',
+			showIcon: true,
 		})
 	}
 }

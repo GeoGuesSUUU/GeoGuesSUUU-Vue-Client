@@ -1,12 +1,15 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, toRefs } from 'vue'
 import { GameService } from '@/client/services/game-service'
-import type { Game } from '@/client/types/bussiness'
+import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
 import GameCardVue from './components/GameCard/GameCard.vue'
 
-const games = ref<Game[]>([])
+const geoStore = useGeoguessuuuStore()
+
+const { gameList } = toRefs(geoStore)
+const { upsetGameList } = geoStore
 onMounted(async () => {
-	games.value = await GameService.getGames()
+	upsetGameList(await GameService.getGames())
 })
 </script>
 
@@ -14,7 +17,7 @@ onMounted(async () => {
 	<div class="container-fluid">
 		<div class="row mb-2">
 			<GameCardVue
-				v-for="(game, index) of games"
+				v-for="(game, index) of gameList"
 				:key="index"
 				:game="game"></GameCardVue>
 		</div>

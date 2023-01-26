@@ -7,6 +7,7 @@ import type {
 	ItemSlot,
 	Item,
 	ItemStore,
+	Game,
 } from '@/client/types/bussiness'
 import { SERVER_DOMAIN } from '@/constants'
 import { useSessionStore } from '@/stores/session'
@@ -20,6 +21,7 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 
 	const countriesRef = ref<Country[]>([])
 	const itemStoreRef = ref<ItemStore[]>([])
+	const gameListRef = ref<Game[]>([])
 
 	// Getters
 
@@ -51,6 +53,8 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 
 	const itemsStore = computed(() => itemStoreRef.value)
 
+	const gameList = computed(() => gameListRef.value)
+
 	const authUserLevelProgress = computed(() => {
 		if (!userRef.value) return 0
 		return Math.round((userRef.value.xp * 100) / userRef.value.levelXpMax)
@@ -73,6 +77,10 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 
 	function upsetItemsStore(_items: ItemStore[]): void {
 		itemStoreRef.value = _items
+	}
+
+	function upsetGameList(_games: Game[]): void {
+		gameListRef.value = _games
 	}
 
 	function addItemsInInventory(items: ItemSlot[]) {
@@ -110,6 +118,14 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 		if (index !== -1) {
 			countriesRef.value[index].claimDate = new Date()
 		}
+	}
+
+	function withdrawCoins(coinsCount: number): void {
+		if (userRef.value?.coins) userRef.value.coins -= coinsCount
+	}
+
+	function addCoins(coinsCount: number): void {
+		if (userRef.value?.coins) userRef.value.coins += coinsCount
 	}
 
 	function updateLifeAndShield(ref: {
@@ -154,15 +170,19 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 		currentUser,
 		countries,
 		itemsStore,
+		gameList,
 		authUserLevelProgress,
 		upsetCountries,
 		upsetCountry,
 		upsetItemsStore,
+		upsetGameList,
 		addItemsInInventory,
 		updateClaimDate,
 		removeItemInInventory,
 		updateLifeAndShield,
 		updateAfterAttack,
 		getItemImage,
+		withdrawCoins,
+		addCoins,
 	}
 })
