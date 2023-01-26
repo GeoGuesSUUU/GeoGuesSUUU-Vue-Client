@@ -11,11 +11,13 @@ onMounted(async () => {
 </script>
 
 <template>
-	<div class="row mb-2">
-		<GameCardVue
-			v-for="(game, index) of games"
-			:key="index"
-			:game="game"></GameCardVue>
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<GameCardVue
+				v-for="(game, index) of games"
+				:key="index"
+				:game="game"></GameCardVue>
+		</div>
 	</div>
 </template>
 
