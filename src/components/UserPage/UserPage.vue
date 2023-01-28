@@ -114,40 +114,40 @@ function getLevelLabelByXP(user: UserApp) {
 						<InventoryCard :item="item"></InventoryCard>
 					</div>
 				</div>
-				<div class="countries">
-					<h1 class="mt-3">
-						Countries
-						<span v-if="user" class="fs-4 badge bg-secondary">
-							{{ user.countries.length }}
-						</span>
-					</h1>
-					<hr class="hr" />
-					<div class="user-country-list overflow-x-auto">
-						<div class="d-inline-flex">
-							<CountryCard
-								v-for="country of user?.countries"
-								:key="country.id"
-								:country="country"
-								:locale="currentUser.locale"></CountryCard>
-						</div>
+			</div>
+			<div class="countries">
+				<h1 class="mt-3">
+					Countries
+					<span v-if="user" class="fs-4 badge bg-secondary">
+						{{ user.countries.length }}
+					</span>
+				</h1>
+				<hr class="hr" />
+				<div class="user-country-list overflow-x-auto">
+					<div class="d-inline-flex">
+						<CountryCard
+							v-for="country of user?.countries"
+							:key="country.id"
+							:country="country"
+							:locale="currentUser.locale"></CountryCard>
 					</div>
 				</div>
-				<div class="scores">
-					<h1 class="mt-3">
-						Best Score
-						<span v-if="user" class="fs-4 badge bg-secondary">
-							{{ scoreBest.length }}
-						</span>
-					</h1>
-					<hr class="hr" />
-					<div class="user-score-list overflow-x-auto">
-						<div class="d-inline-flex">
-							<ScoreCard
-								v-for="score of scoreBest"
-								:key="score.id"
-								:score="score"
-								:locale="currentUser.locale"></ScoreCard>
-						</div>
+			</div>
+			<div class="scores">
+				<h1 class="mt-3">
+					Best Score
+					<span v-if="user" class="fs-4 badge bg-secondary">
+						{{ scoreBest.length }}
+					</span>
+				</h1>
+				<hr class="hr" />
+				<div class="user-score-list overflow-x-auto">
+					<div class="d-inline-flex">
+						<ScoreCard
+							v-for="score of scoreBest"
+							:key="score.id"
+							:score="score"
+							:locale="currentUser.locale"></ScoreCard>
 					</div>
 				</div>
 			</div>
