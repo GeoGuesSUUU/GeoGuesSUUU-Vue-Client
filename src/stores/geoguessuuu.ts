@@ -8,6 +8,7 @@ import type {
 	Item,
 	ItemStore,
 	Game,
+	MapColor,
 } from '@/client/types/bussiness'
 import { SERVER_DOMAIN } from '@/constants'
 import { useSessionStore } from '@/stores/session'
@@ -18,6 +19,14 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 	const { user: userRef } = toRefs(sessionStore)
 
 	// State
+
+	const mapColor = ref<MapColor>(
+		JSON.parse(localStorage.getItem('map-color') as string) ?? {
+			no_onwer: '#ff0',
+			you: '#0f0',
+			other: '#f00',
+		}
+	)
 
 	const countriesRef = ref<Country[]>([])
 	const itemStoreRef = ref<ItemStore[]>([])
@@ -166,12 +175,23 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 		return '/src/assets/item_default.svg'
 	}
 
+	function changeMapColor(no_owner?: string, you?: string, other?: string) {
+		const color = {
+			no_onwer: no_owner ?? '#ff0',
+			you: you ?? '#0f0',
+			other: other ?? '#f00',
+		}
+		localStorage.setItem('map-color', JSON.stringify(color))
+		mapColor.value = color
+	}
+
 	return {
 		currentUser,
 		countries,
 		itemsStore,
 		gameList,
 		authUserLevelProgress,
+		mapColor,
 		upsetCountries,
 		upsetCountry,
 		upsetItemsStore,
@@ -184,5 +204,6 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 		getItemImage,
 		withdrawCoins,
 		addCoins,
+		changeMapColor,
 	}
 })

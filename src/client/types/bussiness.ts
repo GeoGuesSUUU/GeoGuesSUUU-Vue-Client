@@ -64,8 +64,26 @@ export interface ItemStore {
 	promoPrice: number
 }
 
+export interface Level {
+	id: number
+	difficulty: number
+	label: string
+	description: string
+	game: Game
+	scores?: Score[]
+}
+
+export interface Score {
+	id: number
+	score: number
+	createdAt: Date
+	time: number
+	level: Level
+	user?: User
+}
+
 export interface UserDetails extends User {
-	scores: []
+	scores: Score[]
 	userItems?: ItemSlot[]
 	countries: Country[]
 }
@@ -100,4 +118,10 @@ export interface CountryApp extends Country {
 export interface ClaimRewards {
 	coins: number
 	items: ItemSlot[]
+}
+
+export interface MapColor {
+	no_onwer: string
+	you: string
+	other: string
 }

@@ -7,23 +7,42 @@ import {
 } from '@/assets/default_countries'
 import { CountryService } from '@/client/services/country-service'
 import { eventEmitter } from '@/client/services/event-service'
+import { NotifyService, NotifyType } from '@/client/services/notify-service'
 import type { Country, CountryApp } from '@/client/types/bussiness'
 import MainGameSideBar from '@/components/MainGameSideBar/MainGameSideBar.vue'
 import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
-import { NotifyService, NotifyType } from '../../client/services/notify-service'
 
 const geoStore = useGeoguessuuuStore()
 
-const { currentUser, countries } = toRefs(geoStore)
-const { upsetCountries, addItemsInInventory, addCoins } = geoStore
+const { currentUser, countries, mapColor } = toRefs(geoStore)
+const { upsetCountries, addItemsInInventory, addCoins, changeMapColor } =
+	geoStore
 
 const map = ref(null)
+const editMapColor = ref(false)
+
+const mapColorNO = ref(color3DigitTo6Digit(mapColor.value.no_onwer))
+const mapColorY = ref(color3DigitTo6Digit(mapColor.value.you))
+const mapColorO = ref(color3DigitTo6Digit(mapColor.value.other))
 
 const mapValue = ref<Record<string, object>>({})
 
 const offCanvasValues = ref<CountryApp | null>(null)
 
 const disabledReloadButton = ref<boolean>(false)
+
+function color3DigitTo6Digit(color: string): string {
+	return (
+		color.slice(0, 2) +
+		color.charAt(1) +
+		color.charAt(2).repeat(2) +
+		color.charAt(3).repeat(2)
+	)
+}
+
+function color6DigitTo3Digit(color: string): string {
+	return color.slice(0, 2) + color.charAt(3) + color.charAt(5)
+}
 
 function updateMap(): void {
 	const values = Object.assign(DEFAULT_COUNTRIES_VALUE, mapValue.value)
@@ -72,11 +91,14 @@ function updateMap(): void {
 
 function getColor(country: Country) {
 	if (country.user) {
-		const start = country.user.id === currentUser.value.id ? '#0F0' : '#F00'
+		const start =
+			country.user.id === currentUser.value.id
+				? mapColor.value.you
+				: mapColor.value.other
 		const end = Math.round((country.life * 15) / country.lifeMax).toString(16)
 		return start + end
 	}
-	return '#FF0F'
+	return mapColor.value.no_onwer
 }
 
 function formatData(countries: Country[]): Record<string, object> {
@@ -159,6 +181,28 @@ function upMap(): void {
 	updateMap()
 }
 
+function saveMapColor(): void {
+	changeMapColor(
+		color6DigitTo3Digit(mapColorNO.value),
+		color6DigitTo3Digit(mapColorY.value),
+		color6DigitTo3Digit(mapColorO.value)
+	)
+	mapColorNO.value = color3DigitTo6Digit(mapColor.value.no_onwer)
+	mapColorY.value = color3DigitTo6Digit(mapColor.value.you)
+	mapColorO.value = color3DigitTo6Digit(mapColor.value.other)
+	editMapColor.value = false
+	upMap()
+}
+
+function resetMapColor(): void {
+	changeMapColor()
+	mapColorNO.value = color3DigitTo6Digit(mapColor.value.no_onwer)
+	mapColorY.value = color3DigitTo6Digit(mapColor.value.you)
+	mapColorO.value = color3DigitTo6Digit(mapColor.value.other)
+	editMapColor.value = false
+	upMap()
+}
+
 eventEmitter.on('@UpWorldMap', () => upMap())
 eventEmitter.on('@UpCountry', () => {
 	if (!targetId.value) return
@@ -202,6 +246,7 @@ eventEmitter.on('@UpCountry', () => {
 						type="button"
 						class="btn btn-secondary dropdown-toggle"
 						data-bs-toggle="dropdown"
+						data-bs-auto-close="outside"
 						aria-expanded="false">
 						Legend
 					</button>
@@ -216,25 +261,43 @@ eventEmitter.on('@UpCountry', () => {
 									<tbody>
 										<tr>
 											<td>
+												<input
+													v-if="editMapColor"
+													type="color"
+													class="p-0 legend-color form-control form-control-color"
+													v-model="mapColorNO" />
 												<div
+													v-else
 													class="legend-color"
-													style="background-color: #ff0" />
+													:style="`background-color: ${mapColor.no_onwer}`" />
 											</td>
 											<td>No Owner</td>
 										</tr>
 										<tr>
 											<td>
+												<input
+													v-if="editMapColor"
+													type="color"
+													class="p-0 legend-color form-control form-control-color"
+													v-model="mapColorY" />
 												<div
+													v-else
 													class="legend-color"
-													style="background-color: #0f0" />
+													:style="`background-color: ${mapColor.you}`" />
 											</td>
 											<td>You</td>
 										</tr>
 										<tr>
 											<td>
+												<input
+													v-if="editMapColor"
+													type="color"
+													class="p-0 legend-color form-control form-control-color"
+													v-model="mapColorO" />
 												<div
+													v-else
 													class="legend-color"
-													style="background-color: #f00" />
+													:style="`background-color: ${mapColor.other}`" />
 											</td>
 											<td>Others</td>
 										</tr>
@@ -251,10 +314,40 @@ eventEmitter.on('@UpCountry', () => {
 							</div>
 						</li>
 						<li>
-							<a class="dropdown-item" href="#">
+							<button
+								v-if="!editMapColor"
+								class="dropdown-item"
+								type="button"
+								@click="editMapColor = true">
 								<i class="bi bi-palette"></i>
 								Change Colors
-							</a>
+							</button>
+							<div
+								v-if="editMapColor"
+								class="btn-group-vertical w-100"
+								role="group">
+								<button
+									class="btn btn-success"
+									type="button"
+									@click="saveMapColor()">
+									<i class="bi bi-palette"></i>
+									Save
+								</button>
+								<button
+									class="btn btn-warning"
+									type="button"
+									@click="resetMapColor()">
+									<i class="bi bi-palette"></i>
+									Reset
+								</button>
+								<button
+									class="btn btn-danger"
+									type="button"
+									@click="editMapColor = false">
+									<i class="bi bi-palette"></i>
+									Cancel
+								</button>
+							</div>
 						</li>
 					</ul>
 				</div>
