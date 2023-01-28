@@ -4,18 +4,18 @@ import { NotifyService, NotifyType } from '@/client/services/notify-service'
 import { StoreService } from '@/client/services/store-service'
 import type { ItemStore } from '@/client/types/bussiness'
 import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
-import ItemCard from './ItemCard/ItemCard.vue'
+import ItemCard from './components/ItemCard/ItemCard.vue'
 
 const geoStore = useGeoguessuuuStore()
 
 const { currentUser, itemsStore } = toRefs(geoStore)
-const { addItemsInInventory, upsetItemsStore } = geoStore
+const { addItemsInInventory, upsetItemsStore, withdrawCoins } = geoStore
 
 async function buy(item: ItemStore) {
 	try {
 		const user = await StoreService.buy(item.id)
 		if (user && currentUser.value.coins) {
-			currentUser.value.coins -= item.promoPrice
+			withdrawCoins(item.promoPrice)
 			addItemsInInventory([
 				{
 					itemType: item.item,

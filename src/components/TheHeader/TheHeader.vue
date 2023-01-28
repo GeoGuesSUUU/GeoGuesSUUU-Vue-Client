@@ -34,7 +34,7 @@ function getLevelLabel() {
 </script>
 
 <template>
-	<header class="px-3 mb-3 border-bottom">
+	<header class="px-3 border-bottom">
 		<div class="container">
 			<div class="header-components d-flex flex-row justify-content-between">
 				<ul class="page-links nav mb-2 justify-content-center mb-md-0">
@@ -102,7 +102,7 @@ function getLevelLabel() {
 							data-bs-toggle="dropdown"
 							aria-expanded="false">
 							<img
-								src="/src/assets/default_user.svg"
+								:src="currentUser.img ?? '/src/assets/default_user.svg'"
 								alt="user image"
 								width="32"
 								height="32"

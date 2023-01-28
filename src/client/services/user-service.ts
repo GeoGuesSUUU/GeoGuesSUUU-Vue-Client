@@ -16,10 +16,20 @@ export class UserService {
 				})
 			).items
 		}
-		return (
+		const user = (
 			await api<UserApp>(`/user/${id}`, {
 				method: 'GET',
 			})
 		).items
+		return <UserApp>{
+			...user,
+			isAdmin: user?.roles.includes('ROLE_ADMIN'),
+			levelProgress: (() => {
+				const min = user.levelXpMin
+				const xp = user.xp
+				const max = user.levelXpMax
+				return Math.round(((xp - min) * 100) / (max - min))
+			})(),
+		}
 	}
 }

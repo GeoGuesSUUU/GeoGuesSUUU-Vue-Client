@@ -15,7 +15,8 @@ import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
 const geoStore = useGeoguessuuuStore()
 
 const { currentUser, countries, mapColor } = toRefs(geoStore)
-const { upsetCountries, addItemsInInventory, changeMapColor } = geoStore
+const { upsetCountries, addItemsInInventory, addCoins, changeMapColor } =
+	geoStore
 
 const map = ref(null)
 const editMapColor = ref(false)
@@ -139,17 +140,15 @@ async function claimAll() {
 	try {
 		const rewards = await CountryService.claim()
 
-		if (currentUser.value.coins) {
-			currentUser.value.coins += rewards.coins
-		}
+		addCoins(rewards.coins)
 
 		if (rewards.items.length > 0) {
 			addItemsInInventory(rewards.items)
 		}
 
-		NotifyService.notify(
-			`You have obtained ${rewards.coins} coins` +
-				(rewards.items.length > 0 ? ` and ${rewards.items.length} items` : '')
+		NotifyService.notify(`+ ${rewards.coins} Coins !`)
+		rewards.items.forEach((item) =>
+			NotifyService.notify(`+ ${item.quantity} "${item.itemType.name}" !`)
 		)
 	} catch (error: any) {
 		NotifyService.notify(error.message, NotifyType.WARNING)

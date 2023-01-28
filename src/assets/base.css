@@ -124,8 +124,8 @@
   background: #6c757d;
 }
 
-body > main {
-  height: calc(100vh - 75px);
+body > #app > main {
+  height: calc(100vh - 59px);
   overflow-y: auto;
 }
 

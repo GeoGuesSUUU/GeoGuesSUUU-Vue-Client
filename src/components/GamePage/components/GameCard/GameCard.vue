@@ -9,7 +9,7 @@ const props = ref(ps.game)
 </script>
 
 <template>
-	<div class="col-md-6">
+	<div class="col-md-6 px-0">
 		<div
 			class="row d-flex flex-row g-0 border rounded overflow-hidden flex-md-row m-4 shadow-sm h-md-250 position-relative">
 			<div class="col p-4 d-flex flex-column position-static">
