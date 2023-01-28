@@ -1,26 +1,33 @@
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, toRefs } from 'vue'
 import { GameService } from '@/client/services/game-service'
-import type { Game } from '@/client/types/bussiness'
 import LoadingData from '@/components/LoadingData/LoadingData.vue'
-import GameCardVue from './components/GameCard/GameCard.vue'
+import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
+import GameCard from './components/GameCard/GameCard.vue'
+
+const geoStore = useGeoguessuuuStore()
+
+const { gameList } = toRefs(geoStore)
+const { upsetGameList } = geoStore
 
 const isLoading = ref(false)
-const games = ref<Game[]>([])
+
 onMounted(async () => {
 	isLoading.value = true
-	games.value = await GameService.getGames()
+	upsetGameList(await GameService.getGames())
 	isLoading.value = false
 })
 </script>
 
 <template>
 	<LoadingData v-if="isLoading"></LoadingData>
-	<div class="row mb-2">
-		<GameCardVue
-			v-for="(game, index) of games"
-			:key="index"
-			:game="game"></GameCardVue>
+	<div class="container-fluid">
+		<div class="row mb-2">
+			<GameCard
+				v-for="(game, index) of gameList"
+				:key="index"
+				:game="game"></GameCard>
+		</div>
 	</div>
 </template>
 

@@ -5,12 +5,12 @@ import { StoreService } from '@/client/services/store-service'
 import type { ItemStore } from '@/client/types/bussiness'
 import LoadingData from '@/components/LoadingData/LoadingData.vue'
 import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
-import ItemCard from './ItemCard/ItemCard.vue'
+import ItemCard from './components/ItemCard/ItemCard.vue'
 
 const geoStore = useGeoguessuuuStore()
 
 const { currentUser, itemsStore } = toRefs(geoStore)
-const { addItemsInInventory, upsetItemsStore } = geoStore
+const { addItemsInInventory, upsetItemsStore, withdrawCoins } = geoStore
 
 const isLoading = ref(false)
 
@@ -18,7 +18,7 @@ async function buy(item: ItemStore) {
 	try {
 		const user = await StoreService.buy(item.id)
 		if (user && currentUser.value.coins) {
-			currentUser.value.coins -= item.promoPrice
+			withdrawCoins(item.promoPrice)
 			addItemsInInventory([
 				{
 					itemType: item.item,

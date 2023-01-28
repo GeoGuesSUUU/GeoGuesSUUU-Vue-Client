@@ -14,8 +14,12 @@ import InventoryCard from '../InventoryCard/InventoryCard.vue'
 const geoStore = useGeoguessuuuStore()
 
 const { currentUser, countries } = toRefs(geoStore)
-const { removeItemInInventory, updateLifeAndShield, updateAfterAttack } =
-	geoStore
+const {
+	removeItemInInventory,
+	updateLifeAndShield,
+	updateAfterAttack,
+	upsetCountry,
+} = geoStore
 const selectValue = ref('all')
 const action = ref<string | null>(null)
 const target = ref<CountryApp | null>(null)
@@ -80,9 +84,13 @@ async function supportCountry(): Promise<void> {
 async function equipCountry(): Promise<void> {
 	if (!target.value || !selectedItem.value) return
 	try {
-		await CountryService.addEquipment(target.value, selectedItem.value.itemType)
+		const country = await CountryService.addEquipment(
+			target.value,
+			selectedItem.value.itemType
+		)
 
 		removeItemInInventory(selectedItem.value)
+		upsetCountry(country)
 		NotifyService.notify('The equipment has been added !', NotifyType.SUCCESS)
 	} catch (error: any) {
 		NotifyService.notify(error.message, NotifyType.WARNING)
