@@ -1,10 +1,12 @@
 <script setup lang="ts">
-import { onMounted, ref, toRefs } from 'vue'
+import { onMounted, ref, toRefs, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { UserService } from '@/client/services/user-service'
-import type { UserApp } from '@/client/types/bussiness'
+import type { UserApp, Score } from '@/client/types/bussiness'
 import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
 import InventoryCard from '../InventoryCard/InventoryCard.vue'
+import CountryCard from './components/CountryCard/CountryCard.vue'
+import ScoreCard from './components/ScoreCard/ScoreCard.vue'
 
 const geoStore = useGeoguessuuuStore()
 const router = useRouter()
@@ -20,6 +22,22 @@ onMounted(async () => {
 	} else {
 		user.value = currentUser.value
 	}
+})
+
+const scoreBest = computed<Score[]>(() => {
+	if (!user.value) return []
+	const best: Score[] = []
+	user.value.scores.forEach((score) => {
+		const index = best.findIndex((o) => o.level.id === score.level.id)
+		if (index !== -1) {
+			if (
+				best[index].score < score.score ||
+				(best[index].score === score.score && best[index].time > score.time)
+			)
+				best[index] = score
+		} else best.push(score)
+	})
+	return best
 })
 
 function getLevelLabelByXP(user: UserApp) {
@@ -91,6 +109,42 @@ function getLevelLabelByXP(user: UserApp) {
 							:key="item.itemType.id"
 							class="col d-flex justify-content-center">
 							<InventoryCard :item="item"></InventoryCard>
+						</div>
+					</div>
+				</div>
+				<div class="countries">
+					<h1 class="mt-3">
+						Countries
+						<span v-if="user" class="fs-4 badge bg-secondary">
+							{{ user.countries.length }}
+						</span>
+					</h1>
+					<hr class="hr" />
+					<div class="user-country-list overflow-x-auto">
+						<div class="d-inline-flex">
+							<CountryCard
+								v-for="country of user?.countries"
+								:key="country.id"
+								:country="country"
+								:locale="currentUser.locale"></CountryCard>
+						</div>
+					</div>
+				</div>
+				<div class="scores">
+					<h1 class="mt-3">
+						Best Score
+						<span v-if="user" class="fs-4 badge bg-secondary">
+							{{ scoreBest.length }}
+						</span>
+					</h1>
+					<hr class="hr" />
+					<div class="user-score-list overflow-x-auto">
+						<div class="d-inline-flex">
+							<ScoreCard
+								v-for="score of scoreBest"
+								:key="score.id"
+								:score="score"
+								:locale="currentUser.locale"></ScoreCard>
 						</div>
 					</div>
 				</div>
