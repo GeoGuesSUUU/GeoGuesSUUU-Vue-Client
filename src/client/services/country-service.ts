@@ -67,9 +67,11 @@ export class CountryService {
 		).items
 	}
 
-	static async addEquipment(country: CountryApp, item: Item): Promise<void> {
-		await api(`/country/equipment/${country.id}/add/${item.id}`, {
-			method: 'POST',
-		})
+	static async addEquipment(country: CountryApp, item: Item): Promise<Country> {
+		return (
+			await api<Country>(`/country/equipment/${country.id}/add/${item.id}`, {
+				method: 'POST',
+			})
+		).items
 	}
 }

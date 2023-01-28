@@ -11,6 +11,7 @@ import { RouterLink } from 'vue-router'
 import { CountryService } from '@/client/services/country-service'
 import {
 	callModalInventoryEmit,
+	callModalMonumentEmit,
 	updateCountryEmit,
 } from '@/client/services/event-service'
 import { NotifyService, NotifyType } from '@/client/services/notify-service'
@@ -91,6 +92,13 @@ onMounted(() => {
 		const type = button.getAttribute('data-bs-type')
 		const countryId = button.getAttribute('data-bs-country-id')
 		if (type && countryId) callModalInventoryEmit(type, +countryId)
+	})
+
+	const monumentModal = document.getElementById('monumentModal')
+	monumentModal?.addEventListener('show.bs.modal', (event: any) => {
+		const button: Element = event.relatedTarget
+		const countryId = button.getAttribute('data-bs-country-id')
+		if (countryId) callModalMonumentEmit(+countryId)
 	})
 })
 
@@ -199,7 +207,12 @@ async function claimById() {
 				<img src="/src/assets/effect.svg" alt="country-price" width="30" />
 				Effects
 			</button>
-			<button type="button" class="btn btn-outline-secondary mx-2">
+			<button
+				type="button"
+				class="btn btn-outline-secondary mx-2"
+				data-bs-toggle="modal"
+				data-bs-target="#monumentModal"
+				:data-bs-country-id="props.country.id">
 				<img src="/src/assets/monument.svg" alt="country-price" width="30" />
 				Monuments
 			</button>
