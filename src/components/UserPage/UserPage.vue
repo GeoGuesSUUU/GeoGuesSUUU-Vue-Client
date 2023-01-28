@@ -26,7 +26,6 @@ function getLevelLabelByXP(user: UserApp) {
 	const min = user.levelXpMin
 	const xp = user.xp
 	const max = user.levelXpMax
-	console.log(user)
 	return `${xp - min} / ${max - min} (${user.levelProgress}%)`
 }
 </script>
