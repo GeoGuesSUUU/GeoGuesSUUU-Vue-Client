@@ -3,6 +3,7 @@ import { onMounted, ref, toRefs, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { UserService } from '@/client/services/user-service'
 import type { UserApp, Score } from '@/client/types/bussiness'
+import LoadingData from '@/components/LoadingData/LoadingData.vue'
 import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
 import InventoryCard from '../InventoryCard/InventoryCard.vue'
 import CountryCard from './components/CountryCard/CountryCard.vue'
@@ -13,15 +14,18 @@ const router = useRouter()
 
 const { currentUser } = toRefs(geoStore)
 
+const isLoading = ref(false)
 const user = ref<UserApp | null>(null)
 
 onMounted(async () => {
+	isLoading.value = true
 	const userId = +router.currentRoute.value.params.id
 	if (userId !== currentUser.value.id) {
 		user.value = await UserService.getUserById(userId)
 	} else {
 		user.value = currentUser.value
 	}
+	isLoading.value = false
 })
 
 const scoreBest = computed<Score[]>(() => {
@@ -50,10 +54,11 @@ const levelLabelByXP = computed(() => {
 </script>
 
 <template>
-	<main>
+	<div>
+		<LoadingData v-if="isLoading"></LoadingData>
 		<div class="card main-card">
-			<div class="card-body">
-				<div v-if="user" class="user-info">
+			<div v-if="user" class="card-body">
+				<div class="user-info">
 					<img
 						src="/src/assets/default_user.svg"
 						alt="user icon"
@@ -151,7 +156,7 @@ const levelLabelByXP = computed(() => {
 				</div>
 			</div>
 		</div>
-	</main>
+	</div>
 </template>
 
 <style scoped src="./UserPage.scss"></style>
