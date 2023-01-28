@@ -101,3 +101,9 @@ export interface ClaimRewards {
 	coins: number
 	items: ItemSlot[]
 }
+
+export interface MapColor {
+	no_onwer: string
+	you: string
+	other: string
+}
