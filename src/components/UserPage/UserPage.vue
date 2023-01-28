@@ -40,12 +40,13 @@ const scoreBest = computed<Score[]>(() => {
 	return best
 })
 
-function getLevelLabelByXP(user: UserApp) {
-	const min = user.levelXpMin
-	const xp = user.xp
-	const max = user.levelXpMax
-	return `${xp - min} / ${max - min} (${user.levelProgress}%)`
-}
+const levelLabelByXP = computed(() => {
+	if (!user.value) return
+	const min = user.value.levelXpMin
+	const xp = user.value.xp
+	const max = user.value.levelXpMax
+	return `${xp - min} / ${max - min} (${user.value.levelProgress}%)`
+})
 </script>
 
 <template>
@@ -74,7 +75,7 @@ function getLevelLabelByXP(user: UserApp) {
 										:style="`width: ${user?.levelProgress}%`"></div>
 								</div>
 								<p v-if="user" class="level-label">
-									{{ getLevelLabelByXP(user) }}
+									{{ levelLabelByXP }}
 								</p>
 							</div>
 							<span class="level-badge badge text-bg-primary">
