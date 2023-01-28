@@ -7,6 +7,10 @@ function callModalInventoryEmit(type: string, countryId: number): void {
 	eventEmitter.emit('@CallModalInventory', { type, countryId })
 }
 
+function callModalMonumentEmit(countryId: number): void {
+	eventEmitter.emit('@CallModalMonument', { countryId })
+}
+
 function upWorldMapEmit(): void {
 	eventEmitter.emit('@UpWorldMap')
 }
@@ -18,6 +22,7 @@ function updateCountryEmit(country: Country): void {
 export {
 	eventEmitter,
 	callModalInventoryEmit,
+	callModalMonumentEmit,
 	upWorldMapEmit,
 	updateCountryEmit,
 }

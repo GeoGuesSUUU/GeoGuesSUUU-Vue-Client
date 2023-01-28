@@ -76,6 +76,26 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 		}
 	}
 
+	function upsetCountryItem(countryId: number, item: Item): void {
+		const index = countriesRef.value.findIndex(
+			(_country) => _country.id === countryId
+		)
+		if (index === -1) return
+		const indexItem = countriesRef.value[index].countryItems?.findIndex(
+			(_itemSlot) => _itemSlot.itemType.id === item.id
+		)
+		if (!indexItem) return
+		else if (indexItem === -1) {
+			countriesRef.value[index].countryItems?.push({
+				quantity: 1,
+				itemType: item,
+			})
+		} else {
+			;(countriesRef.value[index].countryItems as ItemSlot[])[indexItem]
+				.quantity++
+		}
+	}
+
 	function upsetCountries(_countries: Country[]): void {
 		countriesRef.value = _countries
 	}
@@ -177,6 +197,7 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 		mapColor,
 		upsetCountries,
 		upsetCountry,
+		upsetCountryItem,
 		upsetItemsStore,
 		addItemsInInventory,
 		updateClaimDate,

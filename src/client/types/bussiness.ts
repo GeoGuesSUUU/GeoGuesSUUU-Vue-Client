@@ -33,7 +33,7 @@ export interface Country {
 	claimDate: Date
 	effects: Effect[]
 	price: number
-	countryItems?: []
+	countryItems?: ItemSlot[]
 	user?: User
 	ownedAt: Date
 }
