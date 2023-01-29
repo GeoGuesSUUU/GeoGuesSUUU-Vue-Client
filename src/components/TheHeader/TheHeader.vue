@@ -30,7 +30,7 @@ function getLevelLabel() {
 	const min = currentUser.value.levelXpMin
 	const xp = currentUser.value.xp
 	const max = currentUser.value.levelXpMax
-	return `${min - xp} / ${max - min} (${currentUser.value.levelProgress}%)`
+	return `${xp - min} / ${max - min} (${currentUser.value.levelProgress}%)`
 }
 </script>
 

@@ -49,7 +49,7 @@ const levelLabelByXP = computed(() => {
 	const min = user.value.levelXpMin
 	const xp = user.value.xp
 	const max = user.value.levelXpMax
-	return `${min - xp} / ${max - min} (${user.value.levelProgress}%)`
+	return `${xp - min} / ${max - min} (${user.value.levelProgress}%)`
 })
 </script>
 
@@ -61,7 +61,9 @@ const levelLabelByXP = computed(() => {
 				<img
 					:src="user.img ?? '/src/assets/default_user.svg'"
 					alt="user icon"
-					class="user-pic" />
+					width="250"
+					height="250"
+					class="user-pic rounded-circle" />
 				<div class="user-info-stat">
 					<h2>
 						{{ user?.name }}
