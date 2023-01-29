@@ -3,6 +3,7 @@ import { onMounted, ref, toRefs, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { UserService } from '@/client/services/user-service'
 import type { UserApp, Score } from '@/client/types/bussiness'
+import LoadingData from '@/components/LoadingData/LoadingData.vue'
 import { useGeoguessuuuStore } from '@/stores/geoguessuuu'
 import InventoryCard from '../InventoryCard/InventoryCard.vue'
 import CountryCard from './components/CountryCard/CountryCard.vue'
@@ -13,15 +14,18 @@ const router = useRouter()
 
 const { currentUser } = toRefs(geoStore)
 
+const isLoading = ref(false)
 const user = ref<UserApp | null>(null)
 
 onMounted(async () => {
+	isLoading.value = true
 	const userId = +router.currentRoute.value.params.id
 	if (userId !== currentUser.value.id) {
 		user.value = await UserService.getUserById(userId)
 	} else {
 		user.value = currentUser.value
 	}
+	isLoading.value = false
 })
 
 const scoreBest = computed<Score[]>(() => {
@@ -40,18 +44,20 @@ const scoreBest = computed<Score[]>(() => {
 	return best
 })
 
-function getLevelLabelByXP(user: UserApp) {
-	const min = user.levelXpMin
-	const xp = user.xp
-	const max = user.levelXpMax
-	return `${xp - min} / ${max - min} (${user.levelProgress}%)`
-}
+const levelLabelByXP = computed(() => {
+	if (!user.value) return
+	const min = user.value.levelXpMin
+	const xp = user.value.xp
+	const max = user.value.levelXpMax
+	return `${xp - min} / ${max - min} (${user.value.levelProgress}%)`
+})
 </script>
 
 <template>
-	<div class="card main-card">
+	<LoadingData v-if="isLoading"></LoadingData>
+	<div v-if="user" class="card main-card">
 		<div class="card-body">
-			<div v-if="user" class="user-info">
+			<div class="user-info">
 				<img
 					:src="user.img ?? '/src/assets/default_user.svg'"
 					alt="user icon"
@@ -77,7 +83,7 @@ function getLevelLabelByXP(user: UserApp) {
 									:style="`width: ${user?.levelProgress}%`"></div>
 							</div>
 							<p v-if="user" class="level-label">
-								{{ getLevelLabelByXP(user) }}
+								{{ levelLabelByXP }}
 							</p>
 						</div>
 						<span class="level-badge badge text-bg-primary">
