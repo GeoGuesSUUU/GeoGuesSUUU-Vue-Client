@@ -43,7 +43,7 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 				const min = userRef.value.levelXpMin
 				const xp = userRef.value.xp
 				const max = userRef.value.levelXpMax
-				return Math.round(((xp - min) * 100) / (max - min))
+				return Math.floor(((xp - min) * 100) / (max - min))
 			})(),
 		}
 	})
