@@ -46,7 +46,6 @@ const scoreBest = computed<Score[]>(() => {
 
 const levelLabelByXP = computed(() => {
 	if (!user.value) return
-	console.log(user.value)
 	const min = user.value.levelXpMin
 	const xp = user.value.xp
 	const max = user.value.levelXpMax
