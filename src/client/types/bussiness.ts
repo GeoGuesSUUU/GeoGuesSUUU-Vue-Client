@@ -57,7 +57,7 @@ export interface ItemSlot {
 
 export interface ItemStore {
 	id: number
-	item: Item
+	itemType: Item
 	type: string
 	trending: boolean
 	promotion: number
