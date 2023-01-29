@@ -17,6 +17,12 @@ const createdAt = computed(() =>
 		minute: '2-digit',
 	})
 )
+
+const time = computed(() => {
+	const d = new Date(0)
+	d.setMilliseconds(score.value.time)
+	return d.toISOString().substring(11, 23)
+})
 </script>
 
 <template>
@@ -37,7 +43,7 @@ const createdAt = computed(() =>
 			</p>
 			<p class="card-text">
 				<strong>Time</strong>
-				: {{ score.time }}
+				: {{ time }}
 			</p>
 		</div>
 		<div class="card-footer">

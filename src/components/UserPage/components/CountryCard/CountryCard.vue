@@ -7,6 +7,7 @@ const ps = defineProps<{
 	locale?: string
 }>()
 const country = ref(ps.country)
+console.log(country.value)
 const ownedAt = computed(() =>
 	new Date(country.value.ownedAt).toLocaleDateString(ps.locale ?? 'en-US', {
 		year: 'numeric',
