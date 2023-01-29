@@ -125,3 +125,10 @@ export interface MapColor {
 	you: string
 	other: string
 }
+
+export interface UserModify {
+	name?: string
+	locale?: string
+	img?: string
+	password?: string
+}
