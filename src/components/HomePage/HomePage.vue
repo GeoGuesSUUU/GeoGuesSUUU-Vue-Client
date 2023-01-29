@@ -45,6 +45,7 @@ function color6DigitTo3Digit(color: string): string {
 }
 
 function updateMap(): void {
+	if (!document.getElementById('svgMap')) return
 	const values = Object.assign(DEFAULT_COUNTRIES_VALUE, mapValue.value)
 	map.value = new svgMap({
 		targetElementID: 'svgMap',
