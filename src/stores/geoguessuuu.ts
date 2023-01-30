@@ -122,7 +122,7 @@ export const useGeoguessuuuStore = defineStore('geo-guessuuu', () => {
 			if (index !== -1) {
 				userRef.value.userItems[index].quantity += element.quantity
 			} else {
-				userRef.value.userItems[index] = element
+				userRef.value.userItems.push(element)
 			}
 		})
 	}
