@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { onMounted, ref, toRefs, computed } from 'vue'
 import { useRouter } from 'vue-router'
+import { eventEmitter } from '@/client/services/event-service'
 import { UserService } from '@/client/services/user-service'
 import type { UserApp, Score } from '@/client/types/bussiness'
 import LoadingData from '@/components/LoadingData/LoadingData.vue'
@@ -51,6 +52,10 @@ const levelLabelByXP = computed(() => {
 	const max = user.value.levelXpMax
 	return `${xp - min} / ${max - min} (${user.value.levelProgress}%)`
 })
+
+eventEmitter.on('@UpUserProfile', (userData: UserApp) => {
+	user.value = userData
+})
 </script>
 
 <template>
@@ -61,7 +66,9 @@ const levelLabelByXP = computed(() => {
 				<img
 					:src="user.img ?? '/src/assets/default_user.svg'"
 					alt="user icon"
-					class="user-pic" />
+					width="250"
+					height="250"
+					class="user-pic rounded-circle" />
 				<div class="user-info-stat">
 					<h2>
 						{{ user?.name }}
@@ -98,8 +105,12 @@ const levelLabelByXP = computed(() => {
 					</div>
 				</div>
 				<div class="profile-setting">
-					<button type="button" class="btn btn-secondary">
-						<i class="bi bi-gear-fill"></i>
+					<button
+						type="button"
+						class="btn btn-secondary"
+						data-bs-toggle="modal"
+						data-bs-target="#userModifyModal">
+						<i class="bi bi-pencil-square"></i>
 					</button>
 				</div>
 			</div>

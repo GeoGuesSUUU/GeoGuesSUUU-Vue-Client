@@ -24,24 +24,25 @@ function buyItem() {
 	<div
 		:class="{ trending: props.item.trending }"
 		class="card h-100 w-100"
-		:style="`--inventory-card-color: var(--rarety-${props.item.item.rarity.toLocaleLowerCase()}); --shadow-card-rgb: var(--rarety-${props.item.item.rarity.toLocaleLowerCase()}-lighter-rgb);`">
+		:style="`--inventory-card-color: var(--rarety-${props.item.itemType.rarity.toLocaleLowerCase()}); --shadow-card-rgb: var(--rarety-${props.item.itemType.rarity.toLocaleLowerCase()}-lighter-rgb);`">
 		<img
 			v-if="props.item.trending"
 			src="/src/assets/trends.svg"
 			alt="trend icon"
 			class="trend-icon" />
 		<div class="card-header">
-			<span>{{ props.item.item.rarity.toLocaleUpperCase() }}</span>
+			<span>{{ props.item.itemType.rarity.toLocaleUpperCase() }}</span>
 			<i
-				v-if="props.item.item.fantastic"
+				v-if="props.item.itemType.fantastic"
 				class="bi bi-star-fill"
 				title="unique"></i>
 		</div>
 		<div class="p-2 d-flex justify-content-center">
 			<img
-				:src="getItemImage(props.item.item)"
+				:src="getItemImage(props.item.itemType)"
 				:class="
-					!props.item.item.img || props.item.item.img.startsWith('/assets/img/')
+					!props.item.itemType.img ||
+					props.item.itemType.img.startsWith('/assets/img/')
 						? 'px-5 py-2'
 						: ''
 				"
@@ -51,10 +52,10 @@ function buyItem() {
 		<hr class="m-0" />
 		<div class="card-body">
 			<h5 class="card-title">
-				{{ props.item.item.name }}
+				{{ props.item.itemType.name }}
 			</h5>
 			<p class="card-text">
-				{{ props.item.item.description }}
+				{{ props.item.itemType.description }}
 			</p>
 		</div>
 		<hr class="m-0" />
@@ -63,8 +64,8 @@ function buyItem() {
 				<div class="d-flex flex-row align-items-center">
 					<img src="/src/assets/coins.svg" alt="user coins" class="coins" />
 					<div class="d-flex flex-column">
-						<small v-if="props.item.item.price !== props.item.promoPrice">
-							{{ props.item.item.price }}
+						<small v-if="props.item.itemType.price !== props.item.promoPrice">
+							{{ props.item.itemType.price }}
 						</small>
 						<span class="fs-5">{{ props.item.promoPrice }}</span>
 					</div>

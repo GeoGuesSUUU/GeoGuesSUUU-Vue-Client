@@ -21,12 +21,12 @@ const props = ref(ps.game)
 				<p class="card-text mb-auto">
 					{{ props.description }}
 				</p>
-				<router-link
+				<a
 					v-if="props.levels.length > 0"
-					:to="{ name: 'game-page', params: { id: props.id } }"
+					:href="`/game-page/${props.id}`"
 					class="btn btn-primary">
 					Play
-				</router-link>
+				</a>
 				<button v-else type="button" class="btn btn-primary" disabled>
 					Play
 				</button>

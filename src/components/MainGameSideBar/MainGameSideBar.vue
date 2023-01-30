@@ -228,6 +228,7 @@ async function claimById() {
 							class="rounded-circle"
 							:src="props.country.user?.img ?? `/src/assets/default_user.svg`"
 							width="50"
+							height="50"
 							alt="user image" />
 					</router-link>
 					<img
@@ -235,6 +236,7 @@ async function claimById() {
 						class="rounded-circle"
 						src="/src/assets/default_user.svg"
 						width="50"
+						height="50"
 						alt="user image" />
 					<table aria-describedby="" class="table">
 						<tbody>

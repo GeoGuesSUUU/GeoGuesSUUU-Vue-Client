@@ -57,7 +57,7 @@ export interface ItemSlot {
 
 export interface ItemStore {
 	id: number
-	item: Item
+	itemType: Item
 	type: string
 	trending: boolean
 	promotion: number
@@ -124,4 +124,11 @@ export interface MapColor {
 	no_onwer: string
 	you: string
 	other: string
+}
+
+export interface UserModify {
+	name?: string
+	locale?: string
+	img?: string
+	password?: string
 }

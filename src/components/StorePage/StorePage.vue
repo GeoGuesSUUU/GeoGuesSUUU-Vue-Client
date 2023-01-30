@@ -21,14 +21,14 @@ async function buy(item: ItemStore) {
 			withdrawCoins(item.promoPrice)
 			addItemsInInventory([
 				{
-					itemType: item.item,
+					itemType: item.itemType,
 					quantity: 1,
 				},
 			])
 		}
 
 		NotifyService.notify(
-			`You have bought "${item.item.name}" succefully`,
+			`You have bought "${item.itemType.name}" succefully`,
 			NotifyType.SUCCESS
 		)
 	} catch (error: any) {
@@ -51,7 +51,7 @@ onMounted(async () => {
 			class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5 row-cols-xxl-6 g-4">
 			<div
 				v-for="item of itemsStore"
-				:key="item.item.id"
+				:key="item.itemType.id"
 				class="col d-flex justify-content-center">
 				<ItemCard :item="item" @buy-item="buy($event)"></ItemCard>
 			</div>

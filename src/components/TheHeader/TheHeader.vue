@@ -6,6 +6,7 @@ import { useSessionStore } from '@/stores/session'
 import HeaderSettingModal from '../HeaderSettingModal/HeaderSettingModal.vue'
 import InventoryModal from '../InventoryModal/InventoryModal.vue'
 import CountryMonumentModal from './modals/CountryMonumentModal/CountryMonumentModal.vue'
+import UserModifyModal from './modals/UserModifyModal/UserModifyModal.vue'
 
 const geoStore = useGeoguessuuuStore()
 const sessionStore = useSessionStore()
@@ -176,6 +177,7 @@ function getLevelLabel() {
 	<HeaderSettingModal></HeaderSettingModal>
 	<InventoryModal></InventoryModal>
 	<CountryMonumentModal></CountryMonumentModal>
+	<UserModifyModal></UserModifyModal>
 </template>
 
 <style scoped src="./TheHeader.scss"></style>

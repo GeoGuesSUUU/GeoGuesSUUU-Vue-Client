@@ -22,12 +22,12 @@ eventEmitter.on('@CallModalMonument', (res: { countryId: number }) => {
 		class="modal fade"
 		id="monumentModal"
 		tabindex="1051"
-		aria-labelledby="inventoryModalLabel"
+		aria-labelledby="monumentModalLabel"
 		aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-xl">
 			<div class="modal-content">
 				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="inventoryModalLabel">Monuments</h1>
+					<h1 class="modal-title fs-5" id="monumentModalLabel">Monuments</h1>
 					<button
 						type="button"
 						class="btn-close"

@@ -53,7 +53,7 @@ async function checkForm() {
 	<form>
 		<div class="form-floating mb-3">
 			<input
-				type="email"
+				type="text"
 				class="form-control"
 				id="floatingName"
 				placeholder="..."
